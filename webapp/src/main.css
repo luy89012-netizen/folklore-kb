@@ -1,0 +1,55 @@
+/**
+ * 全局样式（仅放根命名空间 + 通用布局 + 全局 token 兜底）
+ *
+ * 约定（与 qiankun experimentalStyleIsolation 配合）：
+ * 1. 所有样式都收敛在 .miniapp-root 命名空间下；不要写裸 html / body 选择器
+ * 2. 不要用 position: fixed; inset: 0 这种霸屏写法
+ * 3. 颜色 / 字体优先使用主站 CSS 变量（--dibp-*）；缺省时给本地 fallback
+ * 4. 组件局部样式请放在组件目录内（如 components/HelloPanel/index.css）
+ *    不要在本文件加业务组件相关样式
+ */
+
+.miniapp-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 320px;
+  padding: 16px 20px;
+  box-sizing: border-box;
+  color: var(--dibp-text-primary, #1f2329);
+  background: var(--dibp-bg, #ffffff);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue',
+    Arial, sans-serif;
+}
+
+.miniapp-header {
+  border-bottom: 1px solid var(--dibp-border, #e5e6eb);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.miniapp-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.miniapp-subtitle {
+  font-size: 12px;
+  color: var(--dibp-text-secondary, #86909c);
+  margin: 0;
+}
+
+.miniapp-main {
+  flex: 1;
+  min-height: 0;
+}
+
+.miniapp-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--dibp-border, #e5e6eb);
+  font-size: 12px;
+  color: var(--dibp-text-tertiary, #a9aeb8);
+}

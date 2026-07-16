@@ -1,0 +1,36 @@
+.miniapp-root .paper-detail-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.miniapp-root .paper-hero {
+  margin-top: 12px;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5EFE5 100%);
+  border-left: 6px solid #5B4A38;
+}
+.miniapp-root .section-card {
+  margin-top: 16px;
+}
+.miniapp-root .note-card {
+  margin-top: 12px;
+  background: #FFFEF9;
+  border-left: 3px solid #F6BD16;
+}
+.miniapp-root .empty-notes {
+  padding: 24px 0;
+  text-align: center;
+}
+.miniapp-root .comment-editor {
+  margin-bottom: 12px;
+}
+.miniapp-root .comment-list {
+  background: #fff;
+  border-radius: 8px;
+  padding: 0 16px;
+}
+.miniapp-root .notes-header {
+  background: #fff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #f0f0f0;
+}

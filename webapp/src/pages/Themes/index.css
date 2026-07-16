@@ -1,0 +1,25 @@
+.miniapp-root .themes-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.miniapp-root .theme-content {
+  background: #fff;
+  padding: 32px;
+  border-radius: 0 8px 8px 8px;
+  border: 1px solid #f0f0f0;
+}
+.miniapp-root .theme-header {
+  padding: 12px 20px;
+  background: #FAFAF7;
+  border-radius: 4px;
+}
+.miniapp-root .theme-review-body {
+  padding: 8px 4px;
+  color: #333;
+}
+.miniapp-root .theme-related-card {
+  transition: transform 0.15s ease;
+}
+.miniapp-root .theme-related-card:hover {
+  transform: translateX(4px);
+}

@@ -1,0 +1,8 @@
+node_modules
+dist
+dist-standalone
+.env
+.env.local
+*.log
+.DS_Store
+.batch_edit_backup

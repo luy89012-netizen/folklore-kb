@@ -1,0 +1,18 @@
+.miniapp-root .papers-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.miniapp-root .papers-filter {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #f0f0f0;
+}
+.miniapp-root .paper-card {
+  height: 100%;
+  min-height: 240px;
+}
+.miniapp-root .paper-card .ant-typography-secondary {
+  color: #666;
+}

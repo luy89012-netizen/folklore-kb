@@ -1,0 +1,54 @@
+/* App-level styles，与 main.css 的 .miniapp-root 命名空间协作 */
+.miniapp-root .app-logo {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 18px;
+  color: #5B4A38;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.miniapp-root .app-logo-title {
+  font-family: "Georgia", "Noto Serif SC", serif;
+}
+
+.miniapp-root .app-header {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  height: 56px;
+  line-height: 56px;
+}
+.miniapp-root .header-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+.miniapp-root .header-sub {
+  color: #999;
+  font-size: 12px;
+  font-family: "Georgia", serif;
+  letter-spacing: 0.5px;
+}
+
+.miniapp-root .app-content {
+  padding: 24px;
+  background: #fafaf7;
+  overflow: auto;
+}
+
+/* 通用卡片增强 */
+.miniapp-root .ant-card {
+  transition: box-shadow 0.2s ease;
+}
+.miniapp-root .ant-card:hover {
+  box-shadow: 0 4px 16px rgba(91, 74, 56, 0.1);
+}

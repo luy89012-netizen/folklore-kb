@@ -1,0 +1,8 @@
+.miniapp-root .weekly-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.miniapp-root .weekly-card {
+  min-height: 200px;
+  height: 100%;
+}

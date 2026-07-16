@@ -1,0 +1,17 @@
+.miniapp-root .home-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.miniapp-root .home-hero {
+  background: linear-gradient(135deg, #F8F4EE 0%, #F0EAE0 100%);
+  padding: 32px;
+  border-radius: 12px;
+  border-left: 6px solid #5B4A38;
+}
+.miniapp-root .theme-entry-card {
+  min-height: 140px;
+  transition: transform 0.2s ease;
+}
+.miniapp-root .theme-entry-card:hover {
+  transform: translateY(-2px);
+}
