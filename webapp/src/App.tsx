@@ -9,6 +9,7 @@ import {
   ClusterOutlined,
   RiseOutlined,
   ReadOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons'
 import HomePage from './pages/Home'
 import PapersPage from './pages/Papers'
@@ -16,6 +17,7 @@ import ThemesPage from './pages/Themes'
 import GraphPage from './pages/Graph'
 import PaperDetailPage from './pages/PaperDetail'
 import WeeklyPage from './pages/Weekly'
+import CategoriesPage from './pages/Categories'
 import './App.css'
 
 const { Header, Sider, Content } = Layout
@@ -28,6 +30,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   const menuItems = [
     { key: 'home', icon: <HomeOutlined />, label: <Link to="/home">首页</Link> },
     { key: 'papers', icon: <BookOutlined />, label: <Link to="/papers">文献库</Link> },
+    { key: 'categories', icon: <AppstoreOutlined />, label: <Link to="/categories">分类目录</Link> },
     { key: 'themes', icon: <ClusterOutlined />, label: <Link to="/themes">主题综述</Link> },
     { key: 'graph', icon: <BranchesOutlined />, label: <Link to="/graph">关系图</Link> },
     { key: 'weekly', icon: <RiseOutlined />, label: <Link to="/weekly">每周新品</Link> },
@@ -63,6 +66,7 @@ function getHeaderTitle(pathKey: string): string {
   const titles: Record<string, string> = {
     home: '📚 首页',
     papers: '📖 文献库',
+    categories: '🗂️ 分类目录',
     themes: '🧭 主题综述',
     graph: '🔗 关系图',
     paper: '📄 文献详情',
@@ -87,6 +91,7 @@ export default function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/papers" element={<PapersPage />} />
+              <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/themes" element={<ThemesPage />} />
               <Route path="/themes/:themeId" element={<ThemesPage />} />
               <Route path="/graph" element={<GraphPage />} />
