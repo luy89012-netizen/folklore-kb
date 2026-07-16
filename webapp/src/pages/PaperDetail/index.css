@@ -1,36 +1,66 @@
 .miniapp-root .paper-detail-page {
-  max-width: 900px;
+  max-width: 920px;
   margin: 0 auto;
 }
+
+/* 论文详情 hero 灰墨化 */
 .miniapp-root .paper-hero {
   margin-top: 12px;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F5EFE5 100%);
-  border-left: 6px solid #5B4A38;
+  background: linear-gradient(135deg, #ffffff 0%, #f7f8fa 100%);
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--ink-800);
+  border-radius: 4px;
+  padding: 24px 28px;
 }
+
+.miniapp-root .paper-hero .ant-typography h2 {
+  color: var(--ink-900);
+  font-family: "Georgia", "Noto Serif SC", serif;
+  letter-spacing: 0.3px;
+}
+
 .miniapp-root .section-card {
-  margin-top: 16px;
+  margin-top: 18px;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
 }
+.miniapp-root .section-card .ant-card-head-title {
+  color: var(--ink-800);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* 笔记卡片：从金黄色改为古铜金 */
 .miniapp-root .note-card {
   margin-top: 12px;
-  background: #FFFEF9;
-  border-left: 3px solid #F6BD16;
+  background: #fbfaf6;
+  border: 1px solid var(--bronze-300);
+  border-left: 3px solid var(--bronze-500);
+  border-radius: 3px;
 }
+
 .miniapp-root .empty-notes {
-  padding: 24px 0;
+  padding: 28px 0;
   text-align: center;
+  color: var(--ink-500);
 }
+
 .miniapp-root .comment-editor {
   margin-bottom: 12px;
 }
+
 .miniapp-root .comment-list {
   background: #fff;
-  border-radius: 8px;
-  padding: 0 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 4px 18px;
 }
+
 .miniapp-root .notes-header {
   background: #fff;
-  padding: 10px 16px;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  border: 1px solid #f0f0f0;
+  padding: 12px 18px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-light);
+  color: var(--ink-700);
 }
