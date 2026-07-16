@@ -226,16 +226,42 @@ DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
 DEEPSEEK_MODEL = "deepseek-chat"
 
 SYSTEM_PROMPT = """你是民俗学 / 人类学 / 遗产研究领域的论文速读助手。
-基于英文标题和摘要，用简洁自然的中文输出四部分：
+基于英文标题和摘要，用简洁自然的中文输出七部分：
+
+【速读部分】
 1. summary  —— 核心观点，1-2 句话
 2. theory   —— 涉及的理论传统或分析框架（如"实践理论"、"物质文化"、"表演理论"）；如无明显理论倾向填"无明显理论指向"
 3. innovation —— 相较既有研究的创新点或独特贡献；如摘要信息不足以判断，如实填"摘要信息不足以判断"
 4. keywords —— 3-5 个中文关键词
 
+【分类部分】（每项必须从给定选项中单选一个英文值）
+5. field —— 学科领域，只能是以下之一：
+   - "folklore"（民俗学：口头传统、节日、民间信仰、传说、仪式）
+   - "anthropology"（人类学：社会/文化/政治/经济人类学）
+   - "heritage"（遗产研究：非遗、博物馆学、文化遗产政策）
+   - "religion"（宗教研究：民间宗教、灵性、宗教社会学）
+   - "interdisciplinary"（明显跨界的跨学科研究）
+
+6. method —— 研究方法，只能是以下之一：
+   - "ethnography"（民族志：田野、参与观察、深度访谈）
+   - "archival"（档案/文本/历史文献研究）
+   - "theoretical"（纯理论、纯概念思辨，无经验材料）
+   - "mixed"（混合方法：民族志+档案 或 质+量）
+   - "review"（综述、评论、书评类文本分析）
+   - "digital"（数字方法：语料库、爬虫、算法、网络分析）
+
+7. paper_type —— 论文性质，只能是以下之一：
+   - "empirical"（经验研究：有具体田野/案例/数据）
+   - "theory_building"（理论建构：明确提出新概念/新框架）
+   - "theory_review"（理论回顾：梳理某个理论传统的演变）
+   - "disciplinary_history"（学科史、思潮史、人物史）
+   - "book_review"（书评）
+   - "editorial"（发刊词、编辑按语、导读）
+   - "essay"（随笔、短评、评论性文章）
+
 严格规则：
-- 全部用简洁书面中文
+- 前 4 项用简洁书面中文；后 3 项必须是给定英文枚举值之一
 - 禁止编造摘要以外的内容
-- 遇到摘要过短或无摘要，如实说"信息不足"
 - 输出必须是 JSON 对象，不要 markdown，不要额外解释"""
 
 
@@ -247,7 +273,11 @@ def summarize_with_deepseek(title: str, abstract: str, api_key: str) -> Optional
     user_prompt = (
         f"标题: {title}\n"
         f"摘要: {abstract}\n\n"
-        '请按此 JSON 格式返回：{"summary":"...","theory":"...","innovation":"...","keywords":["...","..."]}'
+        '请按此 JSON 格式返回：'
+        '{"summary":"...","theory":"...","innovation":"...","keywords":["...","..."],'
+        '"field":"folklore|anthropology|heritage|religion|interdisciplinary",'
+        '"method":"ethnography|archival|theoretical|mixed|review|digital",'
+        '"paper_type":"empirical|theory_building|theory_review|disciplinary_history|book_review|editorial|essay"}'
     )
 
     try:
@@ -264,7 +294,7 @@ def summarize_with_deepseek(title: str, abstract: str, api_key: str) -> Optional
                     {"role": "user", "content": user_prompt},
                 ],
                 "response_format": {"type": "json_object"},
-                "max_tokens": 600,
+                "max_tokens": 800,
                 "temperature": 0.3,
             },
             timeout=60,
@@ -272,12 +302,25 @@ def summarize_with_deepseek(title: str, abstract: str, api_key: str) -> Optional
         r.raise_for_status()
         content = r.json()["choices"][0]["message"]["content"]
         data = json.loads(content)
-        # 规范化输出
+
+        # 枚举白名单校验
+        VALID_FIELDS = {"folklore", "anthropology", "heritage", "religion", "interdisciplinary"}
+        VALID_METHODS = {"ethnography", "archival", "theoretical", "mixed", "review", "digital"}
+        VALID_TYPES = {"empirical", "theory_building", "theory_review",
+                       "disciplinary_history", "book_review", "editorial", "essay"}
+
+        field = (data.get("field") or "").strip().lower()
+        method = (data.get("method") or "").strip().lower()
+        ptype = (data.get("paper_type") or "").strip().lower()
+
         return {
             "summary_zh": (data.get("summary") or "").strip()[:500],
             "theory": (data.get("theory") or "").strip()[:300],
             "innovation": (data.get("innovation") or "").strip()[:500],
             "keywords_zh": ", ".join(data.get("keywords") or [])[:200],
+            "field": field if field in VALID_FIELDS else None,
+            "method": method if method in VALID_METHODS else None,
+            "paper_type": ptype if ptype in VALID_TYPES else None,
         }
     except Exception as e:
         log(f"    ⚠️  DeepSeek 失败: {e}")
@@ -385,8 +428,13 @@ def main() -> int:
         dedup.append(row)
     log(f"after dedup: {len(dedup)} rows")
 
-    # 加中文速读（有摘要的才处理）
-    log(f"===== enriching with DeepSeek Chinese summary =====")
+    # ★ 过滤：只保留有摘要且摘要 ≥30 字符的（无摘要无法生成中文速读，无价值入库）
+    before = len(dedup)
+    dedup = [r for r in dedup if r.get("abstract") and len(r["abstract"].strip()) >= 30]
+    log(f"after abstract filter: {len(dedup)} rows (filtered out {before - len(dedup)} without abstract)")
+
+    # 加中文速读（此时全部都有摘要）
+    log(f"===== enriching with DeepSeek Chinese summary + classification =====")
     dedup = enrich_with_summary(dedup, os.environ.get("DEEPSEEK_API_KEY"))
 
     n = upsert_to_supabase(dedup)

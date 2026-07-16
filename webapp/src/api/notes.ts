@@ -37,6 +37,10 @@ export interface WeeklyFeedItem {
   theory?: string | null
   innovation?: string | null
   keywords_zh?: string | null
+  // 三维分类（DeepSeek 生成）
+  field?: string | null       // folklore | anthropology | heritage | religion | interdisciplinary
+  method?: string | null      // ethnography | archival | theoretical | mixed | review | digital
+  paper_type?: string | null  // empirical | theory_building | theory_review | disciplinary_history | book_review | editorial | essay
 }
 
 // ============ Notes ============
