@@ -40,9 +40,24 @@ export default defineConfig(({ mode }) => {
           entryFileNames: 'assets/[name]-[hash].js',
           chunkFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash][extname]',
-          manualChunks: {
-            'react-vendor': ['react', 'react-dom'],
-            'antd-vendor': ['antd', '@ant-design/icons'],
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return
+            // 优先匹配 antd 系（要在 react 之前，因为 antd 依赖里也含 react/）
+            if (id.includes('@ant-design/icons')) return 'antd-icons'
+            if (id.includes('/node_modules/rc-') || id.includes('@rc-component')) return 'antd-rc'
+            if (id.includes('/node_modules/antd/')) return 'antd-core'
+            if (id.includes('/node_modules/@ant-design/')) return 'antd-core'
+            // React 相关
+            if (
+              id.includes('/node_modules/react-dom/') ||
+              id.includes('/node_modules/react/') ||
+              id.includes('/node_modules/scheduler/')
+            ) {
+              return 'react-vendor'
+            }
+            if (id.includes('/node_modules/react-router')) return 'router-vendor'
+            // 其他 vendor 合并
+            return 'vendor'
           },
         },
       },
