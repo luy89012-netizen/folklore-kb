@@ -5,7 +5,6 @@ import zhCN from 'antd/locale/zh_CN'
 import {
   HomeOutlined,
   BookOutlined,
-  BranchesOutlined,
   ClusterOutlined,
   RiseOutlined,
   ReadOutlined,
@@ -14,7 +13,6 @@ import {
 import HomePage from './pages/Home'
 import PapersPage from './pages/Papers'
 import ThemesPage from './pages/Themes'
-import GraphPage from './pages/Graph'
 import PaperDetailPage from './pages/PaperDetail'
 import WeeklyPage from './pages/Weekly'
 import CategoriesPage from './pages/Categories'
@@ -32,8 +30,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     { key: 'papers', icon: <BookOutlined />, label: <Link to="/papers">文献库</Link> },
     { key: 'categories', icon: <AppstoreOutlined />, label: <Link to="/categories">分类目录</Link> },
     { key: 'themes', icon: <ClusterOutlined />, label: <Link to="/themes">主题综述</Link> },
-    { key: 'graph', icon: <BranchesOutlined />, label: <Link to="/graph">关系图</Link> },
-    { key: 'weekly', icon: <RiseOutlined />, label: <Link to="/weekly">每周新品</Link> },
+    { key: 'weekly', icon: <RiseOutlined />, label: <Link to="/weekly">新作速览</Link> },
   ]
 
   return (
@@ -68,9 +65,8 @@ function getHeaderTitle(pathKey: string): string {
     papers: '📖 文献库',
     categories: '🗂️ 分类目录',
     themes: '🧭 主题综述',
-    graph: '🔗 关系图',
     paper: '📄 文献详情',
-    weekly: '⚡ 每周前沿',
+    weekly: '⚡ 新作速览',
   }
   return titles[pathKey] || '民俗学知识库'
 }
@@ -79,8 +75,10 @@ export default function App() {
   return (
     <ConfigProvider locale={zhCN} theme={{
       token: {
-        colorPrimary: '#5B4A38',
-        borderRadius: 6,
+        colorPrimary: '#2c3e50',
+        colorLink: '#2c3e50',
+        colorLinkHover: '#b08d57',
+        borderRadius: 4,
         fontFamily: '"PingFang SC", "Source Han Sans", "Noto Serif SC", "Georgia", serif',
       },
     }}>
@@ -94,7 +92,6 @@ export default function App() {
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/themes" element={<ThemesPage />} />
               <Route path="/themes/:themeId" element={<ThemesPage />} />
-              <Route path="/graph" element={<GraphPage />} />
               <Route path="/paper/:paperId" element={<PaperDetailPage />} />
               <Route path="/weekly" element={<WeeklyPage />} />
             </Routes>
