@@ -11,7 +11,6 @@ import {
   fetchCommentsByPaperId, addComment, deleteComment, PaperComment,
   fetchMyNote, getAnonUserId, getAnonUserName, setAnonUserName,
 } from '../../api'
-import { findRelatedPapers, EDGE_TYPE_META } from '../../data/relations'
 import { findThemesForPaper } from '../../data/themes'
 import './index.css'
 
@@ -122,7 +121,6 @@ export default function PaperDetailPage() {
   if (loading) return <Spin size="large" style={{ display: 'block', margin: '80px auto' }} />
   if (!paper) return <Empty description="未找到该文献" />
 
-  const relations = findRelatedPapers(paper.paper_id)
   const themes = findThemesForPaper(paper.paper_id)
 
   return (
@@ -182,26 +180,6 @@ export default function PaperDetailPage() {
 
       <Card title="理论对话" size="small" className="section-card">
         <Paragraph style={{ lineHeight: 1.9, marginBottom: 12 }}>{paper.dialogues}</Paragraph>
-        {relations.length > 0 && (
-          <>
-            <Divider style={{ margin: '12px 0' }} />
-            <Text strong style={{ fontSize: 13 }}>直接关联的文献：</Text>
-            <List
-              size="small"
-              dataSource={relations}
-              renderItem={(r) => {
-                const otherId = r.source === paper.paper_id ? r.target : r.source
-                return (
-                  <List.Item>
-                    <Tag color={EDGE_TYPE_META[r.type].color}>{EDGE_TYPE_META[r.type].label}</Tag>
-                    <Link to={`/paper/${otherId}`}>{otherId}</Link>
-                    <Text type="secondary" style={{ marginLeft: 8, fontSize: 12 }}>{r.label}</Text>
-                  </List.Item>
-                )
-              }}
-            />
-          </>
-        )}
       </Card>
 
       {themes.length > 0 && (
