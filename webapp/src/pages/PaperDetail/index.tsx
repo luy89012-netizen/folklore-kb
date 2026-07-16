@@ -161,7 +161,7 @@ export default function PaperDetailPage() {
       </Card>
 
       <Card title="摘要" size="small" className="section-card">
-        <Paragraph style={{ lineHeight: 1.9, marginBottom: 0 }}>{paper.abstract}</Paragraph>
+        <Paragraph style={{ lineHeight: 1.9, marginBottom: 0, whiteSpace: 'pre-wrap' }}>{paper.abstract}</Paragraph>
       </Card>
 
       <Card title="核心论点" size="small" className="section-card">
