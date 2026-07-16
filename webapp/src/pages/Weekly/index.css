@@ -5,22 +5,31 @@
 .miniapp-root .weekly-card {
   min-height: 200px;
   height: 100%;
+  border: 1px solid var(--border-light);
+  background: #fff;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.miniapp-root .weekly-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(44, 62, 80, 0.08);
+  border-color: var(--bronze-300);
 }
 
-/* 中文速读区块 */
+/* 中文速读区块：从金黄色改为古铜金 + 象牙白 */
 .miniapp-root .zh-summary {
-  background: linear-gradient(135deg, #fff9e6 0%, #fff5d9 100%);
-  border: 1px solid #ffe58f;
-  border-radius: 6px;
-  padding: 10px 12px;
-  margin-top: 4px;
+  background: linear-gradient(135deg, #fbfaf6 0%, #f5f0e4 100%);
+  border: 1px solid var(--bronze-300);
+  border-left: 3px solid var(--bronze-500);
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin-top: 6px;
 }
 .miniapp-root .zh-summary-row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
-  margin-bottom: 4px;
-  line-height: 1.55;
+  margin-bottom: 6px;
+  line-height: 1.65;
 }
 .miniapp-root .zh-summary-row:last-of-type {
   margin-bottom: 0;
@@ -29,11 +38,20 @@
   flex: 0 0 auto;
   font-size: 12px;
   font-weight: 600;
-  color: #874d00;
+  color: var(--bronze-700);
   white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 .miniapp-root .zh-summary-text {
   flex: 1 1 auto;
-  font-size: 12.5px;
-  color: #333;
+  font-size: 13px;
+  color: var(--ink-800);
+  line-height: 1.7;
+}
+
+/* 「已速读」金牌小 tag */
+.miniapp-root .zh-summary-badge {
+  background: var(--bronze-100) !important;
+  color: var(--bronze-700) !important;
+  border: 1px solid var(--bronze-300) !important;
 }
