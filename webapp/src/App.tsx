@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense, lazy } from 'react'
 import { HashRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
-import { Layout, Menu, ConfigProvider, App as AntApp } from 'antd'
+import { Layout, Menu, ConfigProvider, App as AntApp, Spin } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import {
   HomeOutlined,
@@ -11,12 +11,19 @@ import {
   AppstoreOutlined,
 } from '@ant-design/icons'
 import HomePage from './pages/Home'
-import PapersPage from './pages/Papers'
-import ThemesPage from './pages/Themes'
-import PaperDetailPage from './pages/PaperDetail'
-import WeeklyPage from './pages/Weekly'
-import CategoriesPage from './pages/Categories'
+// 首屏之外的页面走懒加载，减少首次加载体积
+const PapersPage = lazy(() => import('./pages/Papers'))
+const ThemesPage = lazy(() => import('./pages/Themes'))
+const PaperDetailPage = lazy(() => import('./pages/PaperDetail'))
+const WeeklyPage = lazy(() => import('./pages/Weekly'))
+const CategoriesPage = lazy(() => import('./pages/Categories'))
 import './App.css'
+
+const PageLoading = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 400 }}>
+    <Spin size="large" tip="加载中..." />
+  </div>
+)
 
 const { Header, Sider, Content } = Layout
 
@@ -88,12 +95,12 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/papers" element={<PapersPage />} />
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/themes" element={<ThemesPage />} />
-              <Route path="/themes/:themeId" element={<ThemesPage />} />
-              <Route path="/paper/:paperId" element={<PaperDetailPage />} />
-              <Route path="/weekly" element={<WeeklyPage />} />
+              <Route path="/papers" element={<Suspense fallback={<PageLoading />}><PapersPage /></Suspense>} />
+              <Route path="/categories" element={<Suspense fallback={<PageLoading />}><CategoriesPage /></Suspense>} />
+              <Route path="/themes" element={<Suspense fallback={<PageLoading />}><ThemesPage /></Suspense>} />
+              <Route path="/themes/:themeId" element={<Suspense fallback={<PageLoading />}><ThemesPage /></Suspense>} />
+              <Route path="/paper/:paperId" element={<Suspense fallback={<PageLoading />}><PaperDetailPage /></Suspense>} />
+              <Route path="/weekly" element={<Suspense fallback={<PageLoading />}><WeeklyPage /></Suspense>} />
             </Routes>
           </AppLayout>
         </HashRouter>
