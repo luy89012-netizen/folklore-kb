@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-每周抓取民俗学 / 人类学 / 遗产研究领域的新论文。
+每周抓取民俗学 / 人类学 / 遗产研究领域的新论文，并用 DeepSeek 做中文速读。
 数据源：CrossRef API（免 key、免反爬，公共学术元数据库，全球期刊全覆盖）
       + 中国民俗学网（zh-CN 补充源）
 
 运行方式（GitHub Actions 或本地）：
     SUPABASE_URL=https://xxx.supabase.co \
     SUPABASE_SERVICE_ROLE_KEY=eyJxxx... \
+    DEEPSEEK_API_KEY=sk-xxx \
     python3 scripts/fetch_weekly.py
 
 依赖：
@@ -218,6 +219,96 @@ def fetch_zh_rss(src: Dict[str, str]) -> List[Dict[str, Any]]:
 
 
 # ============================================================
+# DeepSeek 中文速读
+# ============================================================
+
+DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
+DEEPSEEK_MODEL = "deepseek-chat"
+
+SYSTEM_PROMPT = """你是民俗学 / 人类学 / 遗产研究领域的论文速读助手。
+基于英文标题和摘要，用简洁自然的中文输出四部分：
+1. summary  —— 核心观点，1-2 句话
+2. theory   —— 涉及的理论传统或分析框架（如"实践理论"、"物质文化"、"表演理论"）；如无明显理论倾向填"无明显理论指向"
+3. innovation —— 相较既有研究的创新点或独特贡献；如摘要信息不足以判断，如实填"摘要信息不足以判断"
+4. keywords —— 3-5 个中文关键词
+
+严格规则：
+- 全部用简洁书面中文
+- 禁止编造摘要以外的内容
+- 遇到摘要过短或无摘要，如实说"信息不足"
+- 输出必须是 JSON 对象，不要 markdown，不要额外解释"""
+
+
+def summarize_with_deepseek(title: str, abstract: str, api_key: str) -> Optional[Dict[str, Any]]:
+    """调用 DeepSeek 生成中文速读；失败/无摘要返回 None"""
+    if not abstract or len(abstract.strip()) < 30:
+        return None  # 摘要太短就不概括，避免瞎编
+
+    user_prompt = (
+        f"标题: {title}\n"
+        f"摘要: {abstract}\n\n"
+        '请按此 JSON 格式返回：{"summary":"...","theory":"...","innovation":"...","keywords":["...","..."]}'
+    )
+
+    try:
+        r = requests.post(
+            DEEPSEEK_URL,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+            },
+            json={
+                "model": DEEPSEEK_MODEL,
+                "messages": [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_prompt},
+                ],
+                "response_format": {"type": "json_object"},
+                "max_tokens": 600,
+                "temperature": 0.3,
+            },
+            timeout=60,
+        )
+        r.raise_for_status()
+        content = r.json()["choices"][0]["message"]["content"]
+        data = json.loads(content)
+        # 规范化输出
+        return {
+            "summary_zh": (data.get("summary") or "").strip()[:500],
+            "theory": (data.get("theory") or "").strip()[:300],
+            "innovation": (data.get("innovation") or "").strip()[:500],
+            "keywords_zh": ", ".join(data.get("keywords") or [])[:200],
+        }
+    except Exception as e:
+        log(f"    ⚠️  DeepSeek 失败: {e}")
+        return None
+
+
+def enrich_with_summary(rows: List[Dict[str, Any]], api_key: Optional[str]) -> List[Dict[str, Any]]:
+    """给所有含摘要的 row 补上中文速读"""
+    if not api_key:
+        log("⚠️  未配置 DEEPSEEK_API_KEY，跳过中文速读")
+        return rows
+    total = len(rows)
+    done = 0
+    skipped = 0
+    for i, row in enumerate(rows, 1):
+        if not row.get("abstract"):
+            skipped += 1
+            continue
+        summary = summarize_with_deepseek(row["title"], row["abstract"], api_key)
+        if summary:
+            row.update(summary)
+            done += 1
+        # 温和限速（DeepSeek 没有严格 rate limit，但礼貌一点）
+        time.sleep(0.3)
+        if i % 20 == 0:
+            log(f"  progress: {i}/{total} done={done} skipped={skipped}")
+    log(f"✅ 中文速读完成: 处理 {done} 条，跳过 {skipped} 条无摘要")
+    return rows
+
+
+# ============================================================
 # 写库
 # ============================================================
 
@@ -227,6 +318,17 @@ def upsert_to_supabase(rows: List[Dict[str, Any]]) -> int:
     url = os.environ["SUPABASE_URL"].rstrip("/")
     key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     endpoint = f"{url}/rest/v1/weekly_feed?on_conflict=feed_id"
+
+    # PostgREST 批量插入要求所有 dict 有相同的 keys
+    # → 收集所有 keys 的并集，缺失字段补 None
+    all_keys = set()
+    for row in rows:
+        all_keys.update(row.keys())
+    normalized = []
+    for row in rows:
+        r = {k: row.get(k) for k in all_keys}
+        normalized.append(r)
+    rows = normalized
 
     batch_size = 50
     total = 0
@@ -282,6 +384,10 @@ def main() -> int:
         seen.add(row["feed_id"])
         dedup.append(row)
     log(f"after dedup: {len(dedup)} rows")
+
+    # 加中文速读（有摘要的才处理）
+    log(f"===== enriching with DeepSeek Chinese summary =====")
+    dedup = enrich_with_summary(dedup, os.environ.get("DEEPSEEK_API_KEY"))
 
     n = upsert_to_supabase(dedup)
     log(f"✅ done. upserted (or skipped as duplicate): {n} rows for week {monday_of_this_week()}")

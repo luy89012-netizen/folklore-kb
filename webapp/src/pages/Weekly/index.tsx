@@ -95,6 +95,9 @@ export default function WeeklyPage() {
                     <Card hoverable size="small" className="weekly-card">
                       <Space direction="vertical" size={6} style={{ width: '100%' }}>
                         <div>
+                          {it.summary_zh && (
+                            <Tag color="gold" style={{ fontSize: 11 }}>✨ 已速读</Tag>
+                          )}
                           {it.keyword && (
                             <Tag color="cyan" style={{ fontSize: 11 }}>{it.keyword}</Tag>
                           )}
@@ -106,12 +109,45 @@ export default function WeeklyPage() {
                         <Text type="secondary" style={{ fontSize: 12 }}>
                           {it.authors} · {it.year}
                         </Text>
+
+                        {/* 中文速读区块（DeepSeek 生成） */}
+                        {it.summary_zh && (
+                          <div className="zh-summary">
+                            <div className="zh-summary-row">
+                              <span className="zh-summary-label">🎯 核心观点</span>
+                              <span className="zh-summary-text">{it.summary_zh}</span>
+                            </div>
+                            {it.theory && it.theory !== '无明显理论指向' && (
+                              <div className="zh-summary-row">
+                                <span className="zh-summary-label">🔬 理论</span>
+                                <span className="zh-summary-text">{it.theory}</span>
+                              </div>
+                            )}
+                            {it.innovation && it.innovation !== '摘要信息不足以判断' && (
+                              <div className="zh-summary-row">
+                                <span className="zh-summary-label">💡 创新点</span>
+                                <span className="zh-summary-text">{it.innovation}</span>
+                              </div>
+                            )}
+                            {it.keywords_zh && (
+                              <div style={{ marginTop: 4 }}>
+                                {it.keywords_zh.split(/[,，]/).map((kw, idx) => (
+                                  <Tag key={idx} color="purple" style={{ fontSize: 11, marginBottom: 2 }}>
+                                    {kw.trim()}
+                                  </Tag>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
                         {it.abstract && (
                           <Paragraph
                             type="secondary"
-                            ellipsis={{ rows: 3, expandable: true, symbol: '展开' }}
+                            ellipsis={{ rows: 2, expandable: true, symbol: '展开原文摘要' }}
                             style={{ fontSize: 12, marginBottom: 0 }}
                           >
+                            <Text type="secondary" style={{ fontSize: 11, marginRight: 4 }}>[原文]</Text>
                             {it.abstract}
                           </Paragraph>
                         )}

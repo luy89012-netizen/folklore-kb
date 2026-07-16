@@ -32,6 +32,11 @@ export interface WeeklyFeedItem {
   abstract?: string
   keyword?: string
   week_of?: string
+  // 中文速读（DeepSeek 生成，可能为 null）
+  summary_zh?: string | null
+  theory?: string | null
+  innovation?: string | null
+  keywords_zh?: string | null
 }
 
 // ============ Notes ============

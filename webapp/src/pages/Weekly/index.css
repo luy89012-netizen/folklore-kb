@@ -6,3 +6,34 @@
   min-height: 200px;
   height: 100%;
 }
+
+/* 中文速读区块 */
+.miniapp-root .zh-summary {
+  background: linear-gradient(135deg, #fff9e6 0%, #fff5d9 100%);
+  border: 1px solid #ffe58f;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 4px;
+}
+.miniapp-root .zh-summary-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 4px;
+  line-height: 1.55;
+}
+.miniapp-root .zh-summary-row:last-of-type {
+  margin-bottom: 0;
+}
+.miniapp-root .zh-summary-label {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: #874d00;
+  white-space: nowrap;
+}
+.miniapp-root .zh-summary-text {
+  flex: 1 1 auto;
+  font-size: 12.5px;
+  color: #333;
+}
