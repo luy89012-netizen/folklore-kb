@@ -1,54 +1,132 @@
-/* App-level styles，与 main.css 的 .miniapp-root 命名空间协作 */
+/* App-level styles，灰墨极简（现代学术）主题 */
+
 .miniapp-root .app-logo {
-  height: 56px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 18px;
-  color: #5B4A38;
-  border-bottom: 1px solid #f0f0f0;
+  font-size: 17px;
+  color: var(--ink-900);
+  border-bottom: 1px solid var(--border-light);
   padding: 0 12px;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
+  background: #fff;
+  letter-spacing: 0.5px;
 }
 .miniapp-root .app-logo-title {
-  font-family: "Georgia", "Noto Serif SC", serif;
+  font-family: "Georgia", "Noto Serif SC", "Songti SC", serif;
 }
 
 .miniapp-root .app-header {
   background: #fff;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 0 24px;
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 28px;
   display: flex;
   align-items: baseline;
   gap: 16px;
-  height: 56px;
-  line-height: 56px;
+  height: 60px;
+  line-height: 60px;
+  box-shadow: 0 1px 0 rgba(44, 62, 80, 0.03);
 }
 .miniapp-root .header-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
-  color: #333;
+  color: var(--ink-800);
+  letter-spacing: 0.3px;
 }
 .miniapp-root .header-sub {
-  color: #999;
+  color: var(--ink-500);
   font-size: 12px;
   font-family: "Georgia", serif;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
+  font-style: italic;
 }
 
 .miniapp-root .app-content {
-  padding: 24px;
-  background: #fafaf7;
+  padding: 28px;
+  background: var(--page-bg);
+  background-image: var(--paper-texture);
+  background-size: var(--paper-texture-size);
   overflow: auto;
+}
+
+/* 侧边栏灰墨化 */
+.miniapp-root .ant-layout-sider {
+  background: #fff !important;
+  border-right: 1px solid var(--border-light);
+}
+.miniapp-root .ant-menu {
+  border-inline-end: none !important;
+  background: #fff;
+  color: var(--ink-700);
+  font-size: 14px;
+}
+.miniapp-root .ant-menu-light .ant-menu-item-selected {
+  background-color: var(--ink-100) !important;
+  color: var(--ink-800) !important;
+  font-weight: 500;
+  border-right: 3px solid var(--brand-accent);
+}
+.miniapp-root .ant-menu-light .ant-menu-item:hover {
+  background-color: var(--ink-50) !important;
+  color: var(--ink-800) !important;
 }
 
 /* 通用卡片增强 */
 .miniapp-root .ant-card {
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
 }
 .miniapp-root .ant-card:hover {
-  box-shadow: 0 4px 16px rgba(91, 74, 56, 0.1);
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.08);
+}
+.miniapp-root .ant-card-head {
+  border-bottom: 1px solid var(--border-light);
+  color: var(--ink-800);
+}
+
+/* Tag 灰墨化（保留分类色，但去饱和） */
+.miniapp-root .ant-tag {
+  border-radius: 2px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* Button 灰墨化 */
+.miniapp-root .ant-btn-primary {
+  background: var(--ink-800);
+  border-color: var(--ink-800);
+}
+.miniapp-root .ant-btn-primary:hover {
+  background: var(--ink-700) !important;
+  border-color: var(--ink-700) !important;
+}
+.miniapp-root .ant-btn-link {
+  color: var(--ink-800);
+}
+.miniapp-root .ant-btn-link:hover {
+  color: var(--bronze-500) !important;
+}
+
+/* 分割线 */
+.miniapp-root .ant-divider {
+  border-color: var(--border-light);
+}
+
+/* 链接色统一 */
+.miniapp-root a {
+  color: var(--ink-800);
+  transition: color 0.15s;
+}
+.miniapp-root a:hover {
+  color: var(--bronze-500);
+}
+
+/* 正文行距与字色 */
+.miniapp-root .ant-typography {
+  color: var(--text-primary);
 }
