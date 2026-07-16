@@ -3,7 +3,6 @@ import { Card, Row, Col, Statistic, Tag, Typography, Spin, Divider, Space } from
 import { Link } from 'react-router-dom'
 import { fetchAllPapers, CATEGORY_META, THEME_META, Paper } from '../../api'
 import { THEME_REVIEWS } from '../../data/themes'
-import { RELATIONS } from '../../data/relations'
 import './index.css'
 
 const { Title, Paragraph, Text } = Typography
@@ -26,13 +25,20 @@ export default function HomePage() {
   // 分类统计
   const catCounts: Record<string, number> = {}
   const themeCounts: Record<string, number> = {}
+  const countries = new Set<string>()
+  const years: number[] = []
   papers.forEach((p) => {
     if (p.category) catCounts[p.category] = (catCounts[p.category] || 0) + 1
     ;(p.themes || '').split(',').filter(Boolean).forEach((t) => {
       const k = t.trim()
       themeCounts[k] = (themeCounts[k] || 0) + 1
     })
+    const country = (p as any).extra?.country
+    if (country) countries.add(country)
+    if (p.year && p.year > 1000) years.push(p.year)
   })
+  const yearMin = years.length ? Math.min(...years) : 0
+  const yearMax = years.length ? Math.max(...years) : 0
 
   return (
     <div className="home-page">
@@ -44,8 +50,8 @@ export default function HomePage() {
         <Paragraph style={{ marginTop: 16, marginBottom: 0, fontSize: 14, lineHeight: 1.8 }}>
           这是一个按主题组织、可持续扩展的个人研究库。收录 <b>{papers.length}</b> 篇文献，
           横跨 <b>{Object.keys(catCounts).length}</b> 个分类维度、
-          <b> {THEME_REVIEWS.length}</b> 大理论主题、
-          <b> {RELATIONS.length}</b> 条文献间理论对话关系。
+          <b> {THEME_REVIEWS.length}</b> 大理论主题，
+          覆盖 <b>{countries.size}</b> 个国别民俗学传统，时间跨度 <b>{yearMax - yearMin}</b> 年（{yearMin}—{yearMax}）。
         </Paragraph>
       </div>
 
@@ -69,7 +75,7 @@ export default function HomePage() {
         </Col>
         <Col xs={24} sm={12} md={6}>
           <Card>
-            <Statistic title="理论对话" value={RELATIONS.length} suffix="条" />
+            <Statistic title="覆盖国别" value={countries.size} suffix="国" />
           </Card>
         </Col>
       </Row>
