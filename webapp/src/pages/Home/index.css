@@ -2,16 +2,50 @@
   max-width: 1400px;
   margin: 0 auto;
 }
+
+/* 灰墨极简 Hero：白底 + 极淡水墨渐变 + 深墨蓝灰左边框 */
 .miniapp-root .home-hero {
-  background: linear-gradient(135deg, #F8F4EE 0%, #F0EAE0 100%);
-  padding: 32px;
-  border-radius: 12px;
-  border-left: 6px solid #5B4A38;
+  background:
+    linear-gradient(135deg, #ffffff 0%, #f7f8fa 60%, #eef1f5 100%);
+  padding: 40px 44px;
+  border-radius: 4px;
+  border-left: 3px solid var(--ink-800);
+  border-top: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.04);
+  position: relative;
+  overflow: hidden;
 }
+
+/* Hero 右侧极淡的书页水印 */
+.miniapp-root .home-hero::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  top: -30px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(176, 141, 87, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.miniapp-root .home-hero h1,
+.miniapp-root .home-hero .ant-typography h1 {
+  color: var(--ink-900);
+  font-family: "Georgia", "Noto Serif SC", "Songti SC", serif;
+  letter-spacing: 0.5px;
+}
+
 .miniapp-root .theme-entry-card {
   min-height: 140px;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border-light);
+  background: #fff;
 }
+
 .miniapp-root .theme-entry-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.08);
+  border-color: var(--bronze-300);
 }
