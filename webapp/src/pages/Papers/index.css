@@ -4,15 +4,23 @@
 }
 .miniapp-root .papers-filter {
   background: #fff;
-  padding: 16px;
-  border-radius: 8px;
+  padding: 16px 18px;
+  border-radius: 4px;
   margin-bottom: 16px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 1px 2px rgba(44, 62, 80, 0.03);
 }
 .miniapp-root .paper-card {
   height: 100%;
   min-height: 240px;
+  border: 1px solid var(--border-light);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.miniapp-root .paper-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(44, 62, 80, 0.08);
+  border-color: var(--bronze-300);
 }
 .miniapp-root .paper-card .ant-typography-secondary {
-  color: #666;
+  color: var(--ink-600);
 }
