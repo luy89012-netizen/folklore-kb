@@ -110,9 +110,9 @@ export default function WeeklyPage() {
     <div className="weekly-page">
       <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <Space direction="vertical" size={0}>
-          <Title level={4} style={{ margin: 0 }}>⚡ 每周前沿</Title>
+          <Title level={4} style={{ margin: 0 }}>⚡ 新作速览</Title>
           <Text type="secondary" style={{ fontSize: 13 }}>
-            自动抓取美国 / 欧洲人类学、民俗学、遗产研究领域的新论文，每周一 09:00 更新
+            自动抓取民俗学、人类学、遗产研究领域的新作，每周一 09:00 更新
           </Text>
         </Space>
         <Button icon={<ReloadOutlined />} onClick={reload}>刷新</Button>
