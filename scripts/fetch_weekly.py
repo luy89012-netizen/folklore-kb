@@ -43,6 +43,9 @@ JOURNALS: List[Dict[str, str]] = [
     # ---------- 遗产研究 ----------
     {"issn": "1352-7258", "name": "International Journal of Heritage Studies", "field": "遗产研究"},
     {"issn": "1479-8360", "name": "Museum & Society", "field": "遗产研究"},
+    # ---------- 中国/东亚人文研究（英文，有 abstract） ----------
+    {"issn": "1520-9857", "name": "Modern Chinese Literature and Culture", "field": "中国文学与文化"},
+    {"issn": "1067-9847", "name": "positions: asia critique", "field": "东亚批判研究"},
 ]
 
 # 中文源（RSS）
@@ -223,7 +226,7 @@ def fetch_zh_rss(src: Dict[str, str]) -> List[Dict[str, Any]]:
 # ============================================================
 
 DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
-DEEPSEEK_MODEL = "deepseek-chat"
+DEEPSEEK_MODEL = "deepseek-v4-flash"  # 2026-07-20 DeepSeek 废弃 deepseek-chat 命名，升级到 v4 系列
 
 SYSTEM_PROMPT = """你是民俗学 / 人类学 / 遗产研究领域的论文速读助手。
 基于英文标题和摘要，用简洁自然的中文输出七部分：
