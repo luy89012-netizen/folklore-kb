@@ -65,7 +65,7 @@ export default function HomePage() {
 
   return (
     <div className="home-page">
-      <div className="home-hero">
+      <div className="home-hero witch-constellation">
         <Title level={2} style={{ marginBottom: 8 }}>民俗学知识库</Title>
         <Paragraph type="secondary" style={{ fontSize: 15, marginBottom: 0 }}>
           Folklore Studies · Anthropology · Heritage · A Personal Reading Corpus
@@ -142,7 +142,10 @@ export default function HomePage() {
         </Col>
       </Row>
 
-      <Divider titlePlacement="left">☀️ 今日</Divider>
+      <Divider titlePlacement="left">
+        <span>☽ 今日</span>
+        <span className="witch-moonphase" style={{ marginLeft: 10 }} />
+      </Divider>
       <Row gutter={[16, 16]}>
         {/* 每日专题 */}
         {dailyTopic && (
@@ -188,6 +191,7 @@ export default function HomePage() {
                 title={<span>🔬 每日案例</span>}
                 size="small"
                 style={{ borderTop: '3px solid #b08d57' }}
+                className="witch-star-corner"
                 extra={<Link to="/cases"><Text type="secondary" style={{ fontSize: 12 }}>案例库 →</Text></Link>}
               >
                 <Text strong style={{ fontSize: 14 }}>{dailyCaseData.case_name}</Text>
