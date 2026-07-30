@@ -9,6 +9,8 @@ import {
   RiseOutlined,
   ReadOutlined,
   AppstoreOutlined,
+  SearchOutlined,
+  ExperimentOutlined,
 } from '@ant-design/icons'
 import HomePage from './pages/Home'
 // 首屏之外的页面走懒加载，减少首次加载体积
@@ -17,6 +19,8 @@ const ThemesPage = lazy(() => import('./pages/Themes'))
 const PaperDetailPage = lazy(() => import('./pages/PaperDetail'))
 const WeeklyPage = lazy(() => import('./pages/Weekly'))
 const CategoriesPage = lazy(() => import('./pages/Categories'))
+const SearchPage = lazy(() => import('./pages/Search'))
+const CasesPage = lazy(() => import('./pages/Cases'))
 import './App.css'
 
 const PageLoading = () => (
@@ -34,9 +38,11 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
   const menuItems = [
     { key: 'home', icon: <HomeOutlined />, label: <Link to="/home">首页</Link> },
+    { key: 'search', icon: <SearchOutlined />, label: <Link to="/search">搜索</Link> },
     { key: 'papers', icon: <BookOutlined />, label: <Link to="/papers">文献库</Link> },
     { key: 'categories', icon: <AppstoreOutlined />, label: <Link to="/categories">分类目录</Link> },
     { key: 'themes', icon: <ClusterOutlined />, label: <Link to="/themes">主题综述</Link> },
+    { key: 'cases', icon: <ExperimentOutlined />, label: <Link to="/cases">案例库</Link> },
     { key: 'weekly', icon: <RiseOutlined />, label: <Link to="/weekly">新作速览</Link> },
   ]
 
@@ -69,9 +75,11 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 function getHeaderTitle(pathKey: string): string {
   const titles: Record<string, string> = {
     home: '📚 首页',
+    search: '🔍 全局搜索',
     papers: '📖 文献库',
     categories: '🗂️ 分类目录',
     themes: '🧭 主题综述',
+    cases: '🔬 案例库',
     paper: '📄 文献详情',
     weekly: '⚡ 新作速览',
   }
@@ -101,6 +109,8 @@ export default function App() {
               <Route path="/themes/:themeId" element={<Suspense fallback={<PageLoading />}><ThemesPage /></Suspense>} />
               <Route path="/paper/:paperId" element={<Suspense fallback={<PageLoading />}><PaperDetailPage /></Suspense>} />
               <Route path="/weekly" element={<Suspense fallback={<PageLoading />}><WeeklyPage /></Suspense>} />
+              <Route path="/search" element={<Suspense fallback={<PageLoading />}><SearchPage /></Suspense>} />
+              <Route path="/cases" element={<Suspense fallback={<PageLoading />}><CasesPage /></Suspense>} />
             </Routes>
           </AppLayout>
         </HashRouter>
