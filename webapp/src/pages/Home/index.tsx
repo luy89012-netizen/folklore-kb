@@ -85,6 +85,7 @@ export default function HomePage() {
               title={<span>🧭 每日专题 · {dailyTopic.topic}</span>}
               style={{ height: '100%', borderTop: '3px solid #2c3e50' }}
               size="small"
+              className="folk-corner"
             >
               <Paragraph strong style={{ fontSize: 14, marginBottom: 10 }}>{dailyTopic.oneLiner}</Paragraph>
               <Paragraph
