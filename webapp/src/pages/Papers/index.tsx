@@ -1,11 +1,13 @@
 import { useEffect, useState, useMemo } from 'react'
-import { Card, Row, Col, Tag, Input, Select, Space, Typography, Spin, Empty } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import { Card, Row, Col, Tag, Input, Select, Space, Typography, Spin, Empty, Segmented, Button } from 'antd'
+import { SearchOutlined, AppstoreOutlined } from '@ant-design/icons'
 import { Link, useSearchParams } from 'react-router-dom'
 import { fetchAllPapers, CATEGORY_META, THEME_META, Paper } from '../../api'
 import './index.css'
 
 const { Text, Paragraph, Title } = Typography
+
+type Collection = 'all' | 'classic' | 'jaf'
 
 export default function PapersPage() {
   const [papers, setPapers] = useState<Paper[]>([])
@@ -16,6 +18,7 @@ export default function PapersPage() {
   const category = searchParams.get('category') || ''
   const theme = searchParams.get('theme') || ''
   const lang = searchParams.get('lang') || ''
+  const collection = (searchParams.get('collection') as Collection) || 'all'
 
   useEffect(() => {
     fetchAllPapers()
@@ -25,6 +28,11 @@ export default function PapersPage() {
 
   const filtered = useMemo(() => {
     return papers.filter((p) => {
+      // 专题筛选（在其他 filter 之前）
+      const isJaf = p.category === 'frontier_journal' || !!(p.extra as any)?.is_jaf_frontier
+      if (collection === 'jaf' && !isJaf) return false
+      if (collection === 'classic' && isJaf) return false
+
       if (category && p.category !== category) return false
       if (theme && !(p.themes || '').includes(theme)) return false
       if (lang && p.lang !== lang) return false
@@ -40,7 +48,15 @@ export default function PapersPage() {
       }
       return true
     })
-  }, [papers, category, theme, lang, keyword])
+  }, [papers, category, theme, lang, keyword, collection])
+
+  const stats = useMemo(() => {
+    const all = papers.length
+    const jaf = papers.filter(
+      (p) => p.category === 'frontier_journal' || !!(p.extra as any)?.is_jaf_frontier,
+    ).length
+    return { all, jaf, classic: all - jaf }
+  }, [papers])
 
   function setFilter(key: string, val: string) {
     const next = new URLSearchParams(searchParams)
@@ -53,6 +69,21 @@ export default function PapersPage() {
 
   return (
     <div className="papers-page">
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+        <Segmented
+          value={collection}
+          onChange={(v) => setFilter('collection', v === 'all' ? '' : (v as string))}
+          size="large"
+          options={[
+            { label: `📚 全部（${stats.all}）`, value: 'all' },
+            { label: `🏛️ 经典库（${stats.classic}）`, value: 'classic' },
+            { label: `🔥 JAF 前沿（${stats.jaf}）`, value: 'jaf' },
+          ]}
+        />
+        <Link to="/categories">
+          <Button icon={<AppstoreOutlined />}>分类目录视图</Button>
+        </Link>
+      </div>
       <div className="papers-filter">
         <Space wrap size={12}>
           <Input
@@ -96,7 +127,7 @@ export default function PapersPage() {
               { value: 'en', label: '英文' },
             ]}
           />
-          <Text type="secondary">共 {filtered.length} / {papers.length} 篇</Text>
+          <Text type="secondary">共 {filtered.length} 篇</Text>
         </Space>
       </div>
 
