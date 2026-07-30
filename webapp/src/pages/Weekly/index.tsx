@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Card, List, Typography, Space, Tag, Spin, Empty, Divider, Alert, Button, Select } from 'antd'
+import { Card, List, Typography, Space, Tag, Spin, Empty, Divider, Alert, Button, Select, Checkbox } from 'antd'
 import { LinkOutlined, ReloadOutlined, FilterOutlined } from '@ant-design/icons'
 import { fetchWeeklyFeed, WeeklyFeedItem } from '../../api'
+import { getReadState, cycleReadState, READ_STATE_META, ReadState } from '../../utils/readState'
 import './index.css'
 
 const { Title, Text, Paragraph } = Typography
@@ -42,6 +43,9 @@ export default function WeeklyPage() {
   const [fField, setFField] = useState<string>(ALL)
   const [fMethod, setFMethod] = useState<string>(ALL)
   const [fType, setFType] = useState<string>(ALL)
+  const [hideRead, setHideRead] = useState(false)
+  // 用一个递增计数器触发已读状态刷新
+  const [readTick, setReadTick] = useState(0)
 
   const reload = () => {
     setLoading(true)
@@ -56,13 +60,15 @@ export default function WeeklyPage() {
 
   // 筛选后
   const filtered = useMemo(() => {
+    void readTick // 状态变化时重新计算
     return items.filter((it) => {
       if (fField !== ALL && it.field !== fField) return false
       if (fMethod !== ALL && it.method !== fMethod) return false
       if (fType !== ALL && it.paper_type !== fType) return false
+      if (hideRead && getReadState(it.feed_id) === 'done') return false
       return true
     })
-  }, [items, fField, fMethod, fType])
+  }, [items, fField, fMethod, fType, hideRead, readTick])
 
   // 按周分组
   const grouped = filtered.reduce<Record<string, WeeklyFeedItem[]>>((acc, it) => {
@@ -155,6 +161,9 @@ export default function WeeklyPage() {
               清空筛选
             </Button>
           )}
+          <Checkbox checked={hideRead} onChange={(e) => setHideRead(e.target.checked)}>
+            <Text style={{ fontSize: 13 }}>隐藏已读</Text>
+          </Checkbox>
           <Text type="secondary" style={{ fontSize: 12, marginLeft: 'auto' }}>
             当前：{filtered.length} / {items.length} 篇
           </Text>
@@ -170,7 +179,8 @@ export default function WeeklyPage() {
             <Text>
               数据源：Journal of American Folklore · Journal of Folklore Research · Western Folklore ·
               Cultural Anthropology · American Ethnologist · International Journal of Heritage Studies ·
-              Journal of the Royal Anthropological Institute · Museum & Society
+              Journal of the Royal Anthropological Institute · Museum & Society ·
+              Modern Chinese Literature and Culture · positions: asia critique
             </Text>
             <Text type="secondary">
               为保证内容有效性，仅收录含英文摘要的论文；中文速读与三维分类由 DeepSeek 自动生成
@@ -207,8 +217,9 @@ export default function WeeklyPage() {
                   <List.Item>
                     <Card hoverable size="small" className="weekly-card">
                       <Space direction="vertical" size={6} style={{ width: '100%' }}>
-                        {/* 分类 tags */}
-                        <div>
+                        {/* 分类 tags + 阅读状态 */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                          <div style={{ flex: 1 }}>
                           {it.field && FIELD_META[it.field] && (
                             <Tag color={FIELD_META[it.field].color} style={{ fontSize: 11 }}>
                               📚 {FIELD_META[it.field].label}
@@ -227,6 +238,22 @@ export default function WeeklyPage() {
                           {it.source && (
                             <Tag style={{ fontSize: 11 }}>{it.source}</Tag>
                           )}
+                          </div>
+                          {(() => {
+                            const st: ReadState = getReadState(it.feed_id)
+                            const meta = READ_STATE_META[st]
+                            return (
+                              <Button
+                                size="small"
+                                type="text"
+                                style={{ color: meta.color, fontSize: 12, flexShrink: 0, padding: '0 6px' }}
+                                onClick={() => { cycleReadState(it.feed_id); setReadTick((t) => t + 1) }}
+                                title="点击切换：未读 → 感兴趣 → 已读"
+                              >
+                                {meta.icon} {meta.label}
+                              </Button>
+                            )
+                          })()}
                         </div>
                         <Text strong style={{ fontSize: 14, lineHeight: 1.5 }}>{it.title}</Text>
                         <Text type="secondary" style={{ fontSize: 12 }}>
