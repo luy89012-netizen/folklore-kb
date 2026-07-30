@@ -125,7 +125,7 @@ export default function WeeklyPage() {
       </div>
 
       {/* 筛选栏 */}
-      <Card size="small" style={{ marginBottom: 16, background: '#fafafa' }}>
+      <Card size="small" style={{ marginBottom: 16 }}>
         <Space wrap size={8} style={{ width: '100%' }}>
           <Space size={4}>
             <FilterOutlined style={{ color: '#8c8c8c' }} />
