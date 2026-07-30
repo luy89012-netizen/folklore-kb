@@ -3,7 +3,7 @@ import {
   Card, Space, Tag, Typography, Spin, Divider, Button, Input, List, Popconfirm,
   App as AntApp, Modal, Empty,
 } from 'antd'
-import { EditOutlined, DeleteOutlined, LinkOutlined, ArrowLeftOutlined, UserOutlined } from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined, LinkOutlined, ArrowLeftOutlined, UserOutlined, CopyOutlined, ExportOutlined } from '@ant-design/icons'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   fetchPaperById, CATEGORY_META, THEME_META, Paper,
@@ -12,6 +12,8 @@ import {
   fetchMyNote, getAnonUserId, getAnonUserName, setAnonUserName,
 } from '../../api'
 import { findThemesForPaper } from '../../data/themes'
+import { CITE_FORMATS } from '../../utils/cite'
+import { getReadState, cycleReadState, READ_STATE_META, ReadState } from '../../utils/readState'
 import './index.css'
 
 const { Title, Paragraph, Text } = Typography
@@ -34,6 +36,19 @@ export default function PaperDetailPage() {
   const [nameDraft, setNameDraft] = useState('')
   const [myName, setMyName] = useState(getAnonUserName())
   const myUid = getAnonUserId()
+
+  // 就地快速笔记
+  const [quickNoteOpen, setQuickNoteOpen] = useState(false)
+  const [quickNoteDraft, setQuickNoteDraft] = useState('')
+  const [quickNoteSaving, setQuickNoteSaving] = useState(false)
+  // 引用导出
+  const [citeModalOpen, setCiteModalOpen] = useState(false)
+  // 阅读状态
+  const [readState, setReadStateUI] = useState<ReadState>('unread')
+
+  useEffect(() => {
+    if (paperId) setReadStateUI(getReadState(paperId))
+  }, [paperId])
 
   const reload = useCallback(async () => {
     if (!paperId) return
@@ -83,6 +98,34 @@ export default function PaperDetailPage() {
     } catch (e) {
       message.error(`保存失败：${(e as Error).message}`)
     }
+  }
+
+  /** 就地速记：追加到我的笔记末尾（带时间戳行），不覆盖已有内容 */
+  const saveQuickNote = async () => {
+    if (!paperId || !quickNoteDraft.trim()) return
+    setQuickNoteSaving(true)
+    try {
+      const my = await fetchMyNote(paperId)
+      const stamp = new Date().toLocaleDateString('zh-CN')
+      const newBlock = `[${stamp}] ${quickNoteDraft.trim()}`
+      const merged = my?.content ? `${my.content}\n\n${newBlock}` : newBlock
+      await upsertNote(paperId, merged, my?.tags || '')
+      message.success('已记一笔')
+      setQuickNoteDraft('')
+      setQuickNoteOpen(false)
+      reload()
+    } catch (e) {
+      message.error(`保存失败：${(e as Error).message}`)
+    } finally {
+      setQuickNoteSaving(false)
+    }
+  }
+
+  const copyCitation = (text: string) => {
+    navigator.clipboard.writeText(text).then(
+      () => message.success('已复制到剪贴板'),
+      () => message.error('复制失败，请手动选择文本'),
+    )
   }
 
   const removeNote = async () => {
@@ -156,31 +199,110 @@ export default function PaperDetailPage() {
             </a>
           )}
         </Space>
+        <Divider style={{ margin: '12px 0' }} />
+        <Space wrap>
+          <Button
+            size="small"
+            style={{ color: READ_STATE_META[readState].color, borderColor: READ_STATE_META[readState].color }}
+            onClick={() => {
+              if (!paperId) return
+              const next = cycleReadState(paperId)
+              setReadStateUI(next)
+            }}
+          >
+            {READ_STATE_META[readState].icon} {READ_STATE_META[readState].label}
+          </Button>
+          <Button size="small" icon={<EditOutlined />} onClick={() => setQuickNoteOpen(!quickNoteOpen)}>
+            记一笔
+          </Button>
+          <Button size="small" icon={<ExportOutlined />} onClick={() => setCiteModalOpen(true)}>
+            引用
+          </Button>
+        </Space>
+        {quickNoteOpen && (
+          <div style={{ marginTop: 12 }}>
+            <Input.TextArea
+              rows={3}
+              placeholder="随手记：想法、疑问、和其他文献的联系……（保存后追加到你的笔记，不覆盖）"
+              value={quickNoteDraft}
+              onChange={(e) => setQuickNoteDraft(e.target.value)}
+              autoFocus
+            />
+            <Space style={{ marginTop: 8 }}>
+              <Button type="primary" size="small" loading={quickNoteSaving} onClick={saveQuickNote}>
+                保存
+              </Button>
+              <Button size="small" onClick={() => setQuickNoteOpen(false)}>取消</Button>
+            </Space>
+          </div>
+        )}
       </Card>
 
       <Card title="摘要" size="small" className="section-card">
         <Paragraph style={{ lineHeight: 1.9, marginBottom: 0, whiteSpace: 'pre-wrap' }}>{paper.abstract}</Paragraph>
       </Card>
 
-      <Card title="核心论点" size="small" className="section-card">
-        <Paragraph style={{ lineHeight: 1.9, marginBottom: 0, whiteSpace: 'pre-wrap' }}>
-          {paper.key_arguments}
-        </Paragraph>
-      </Card>
+      {(paper.extra as any)?.case_analysis && (
+        <Card
+          title={<span>🔍 核心案例详解</span>}
+          size="small"
+          className="section-card"
+          style={{ borderLeft: '3px solid #e74c3c' }}
+        >
+          {(() => {
+            const c: any = (paper.extra as any).case_analysis
+            return (
+              <div style={{ lineHeight: 1.9 }}>
+                <Paragraph style={{ marginBottom: 12 }}>
+                  <Text strong>【核心案例】</Text>
+                  {c.case_name}
+                </Paragraph>
+                <Paragraph style={{ marginBottom: 12, whiteSpace: 'pre-wrap' }}>
+                  <Text strong>【案例细节】</Text>
+                  {c.case_detail}
+                </Paragraph>
+                <Paragraph style={{ marginBottom: 12, whiteSpace: 'pre-wrap' }}>
+                  <Text strong>【作者如何用它论证】</Text>
+                  {c.how_used}
+                </Paragraph>
+                <Paragraph style={{ marginBottom: 12, whiteSpace: 'pre-wrap' }}>
+                  <Text strong>【延伸解读】</Text>
+                  {c.extended_reading}
+                </Paragraph>
+                <Paragraph type="secondary" style={{ fontSize: 12, marginBottom: 0, fontStyle: 'italic' }}>
+                  {c.source_note}
+                </Paragraph>
+              </div>
+            )
+          })()}
+        </Card>
+      )}
 
-      <Card title="关键概念" size="small" className="section-card">
-        <Space wrap>
-          {(paper.key_concepts || '').split(/[;；]/).filter(Boolean).map((c, i) => (
-            <Tag key={i} color="processing" style={{ fontSize: 13, padding: '4px 10px' }}>
-              {c.trim()}
-            </Tag>
-          ))}
-        </Space>
-      </Card>
+      {paper.key_arguments && (
+        <Card title="核心论点" size="small" className="section-card">
+          <Paragraph style={{ lineHeight: 1.9, marginBottom: 0, whiteSpace: 'pre-wrap' }}>
+            {paper.key_arguments}
+          </Paragraph>
+        </Card>
+      )}
 
-      <Card title="理论对话" size="small" className="section-card">
-        <Paragraph style={{ lineHeight: 1.9, marginBottom: 12 }}>{paper.dialogues}</Paragraph>
-      </Card>
+      {paper.key_concepts && (
+        <Card title="关键概念" size="small" className="section-card">
+          <Space wrap>
+            {(paper.key_concepts || '').split(/[;；,，]/).filter(Boolean).map((c, i) => (
+              <Tag key={i} color="processing" style={{ fontSize: 13, padding: '4px 10px' }}>
+                {c.trim()}
+              </Tag>
+            ))}
+          </Space>
+        </Card>
+      )}
+
+      {paper.dialogues && (
+        <Card title="理论对话" size="small" className="section-card">
+          <Paragraph style={{ lineHeight: 1.9, marginBottom: 12 }}>{paper.dialogues}</Paragraph>
+        </Card>
+      )}
 
       {themes.length > 0 && (
         <Card title="属于以下主题综述" size="small" className="section-card">
@@ -354,6 +476,38 @@ export default function PaperDetailPage() {
             onChange={(e) => setNoteDraft(e.target.value)}
             placeholder="写下你对这篇文献的读书笔记：核心论点、方法论要点、可引用的段落、你的疑问、跟其他文献的对话…"
           />
+        </Space>
+      </Modal>
+
+      <Modal
+        title="导出引用"
+        open={citeModalOpen}
+        onCancel={() => setCiteModalOpen(false)}
+        footer={null}
+        width={680}
+      >
+        <Space direction="vertical" style={{ width: '100%' }} size={16}>
+          {CITE_FORMATS.map(({ key, label, fn }) => {
+            const text = fn(paper)
+            return (
+              <div key={key}>
+                <Space style={{ marginBottom: 6 }}>
+                  <Text strong>{label}</Text>
+                  <Button size="small" icon={<CopyOutlined />} onClick={() => copyCitation(text)}>
+                    复制
+                  </Button>
+                </Space>
+                <pre
+                  style={{
+                    background: '#f7f8fa', padding: 12, borderRadius: 4, fontSize: 12.5,
+                    whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0, lineHeight: 1.7,
+                  }}
+                >
+                  {text}
+                </pre>
+              </div>
+            )
+          })}
         </Space>
       </Modal>
     </div>
