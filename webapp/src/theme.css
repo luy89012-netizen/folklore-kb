@@ -262,3 +262,263 @@
 .miniapp-root .ant-menu-item-selected {
   box-shadow: inset 3px 0 0 #b08d57;
 }
+
+/* ===== 女巫夜空 · 全站版（2026-07-30 三次加码：整站夜空化，风格统一） ===== */
+
+/* --- 0. 夜空色板 --- */
+:root {
+  --night-900: #16202c;
+  --night-800: #1c2836;
+  --night-700: #1f2b3a;
+  --night-600: #243447;
+  --night-500: #2c3e50;
+  --moon-100: #f7f1e5;   /* 月光主文字 */
+  --moon-200: #ece5d3;   /* 月光正文 */
+  --moon-300: #d9d0b8;   /* 月光弱化 */
+  --moon-gold: #d4b483;  /* 月金强调 */
+  --moon-gold-dim: #b08d57;
+}
+
+/* --- 1. 整体底色（覆盖 main.css 的 --dibp-bg 白底） --- */
+.miniapp-root {
+  --dibp-bg: var(--night-700);
+  background: var(--night-700);
+}
+.miniapp-root .ant-layout {
+  background: var(--night-700);
+}
+
+/* --- 2. 侧栏 = 夜幕 --- */
+.miniapp-root .ant-layout-sider {
+  background: var(--night-800) !important;
+  border-right: 1px solid rgba(212, 180, 131, 0.18);
+}
+.miniapp-root .ant-layout-sider-trigger {
+  background: var(--night-900) !important;
+  color: var(--moon-gold) !important;
+}
+.miniapp-root .app-logo {
+  background: transparent;
+  color: var(--moon-100);
+  border-bottom: 1px solid rgba(212, 180, 131, 0.22);
+}
+.miniapp-root .ant-menu {
+  background: transparent;
+  color: var(--moon-300);
+}
+.miniapp-root .ant-menu a { color: inherit; }
+.miniapp-root .ant-menu-light .ant-menu-item { color: var(--moon-300); }
+.miniapp-root .ant-menu-light .ant-menu-item-selected {
+  background-color: rgba(212, 180, 131, 0.16) !important;
+  color: var(--moon-gold) !important;
+  border-right: none;
+}
+.miniapp-root .ant-menu-light .ant-menu-item-selected a { color: var(--moon-gold) !important; }
+.miniapp-root .ant-menu-light .ant-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.07) !important;
+  color: var(--moon-100) !important;
+}
+.miniapp-root .ant-menu-item-selected { box-shadow: inset 3px 0 0 var(--moon-gold-dim); }
+.miniapp-root .app-logo .folk-logo-underline::after { color: var(--moon-gold); opacity: 1; }
+
+/* --- 3. 顶栏 = 夜空横带 + 星座连线 --- */
+.miniapp-root .app-header {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 60'%3E%3Cg stroke='%23d4b483' stroke-opacity='.5' stroke-width='1' fill='none'%3E%3Cpath d='M20 44L70 22L120 34L170 12L225 26'/%3E%3C/g%3E%3Cg fill='%23d4b483'%3E%3Ccircle cx='20' cy='44' r='2.4' opacity='.9'/%3E%3Ccircle cx='70' cy='22' r='2' opacity='.85'/%3E%3Ccircle cx='120' cy='34' r='2.6' opacity='.9'/%3E%3Ccircle cx='170' cy='12' r='1.9' opacity='.8'/%3E%3Ccircle cx='225' cy='26' r='2.3' opacity='.9'/%3E%3Cpath d='M245 36a9 9 0 100 18 6.9 9 0 110-18z' opacity='.85'/%3E%3C/g%3E%3C/svg%3E") no-repeat right 20px center / 240px auto,
+    linear-gradient(90deg, var(--night-800) 0%, var(--night-500) 100%);
+  border-bottom: 1px solid rgba(212, 180, 131, 0.28);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+.miniapp-root .header-title { color: var(--moon-100); }
+.miniapp-root .header-sub { color: var(--moon-gold); opacity: 0.85; }
+
+/* --- 4. 内容区 = 星尘夜空 --- */
+.miniapp-root .app-content {
+  background-color: var(--night-700);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 420'%3E%3Cg fill='%23e8d9b8' opacity='.22'%3E%3Ccircle cx='40' cy='60' r='1.2'/%3E%3Ccircle cx='180' cy='30' r='1'/%3E%3Ccircle cx='320' cy='90' r='1.3'/%3E%3Ccircle cx='90' cy='200' r='1'/%3E%3Ccircle cx='260' cy='250' r='1.2'/%3E%3Ccircle cx='380' cy='330' r='1'/%3E%3Ccircle cx='150' cy='360' r='1.1'/%3E%3Ccircle cx='400' cy='180' r='.9'/%3E%3Ccircle cx='30' cy='390' r='1'/%3E%3C/g%3E%3Cg fill='%23d4b483' opacity='.4'%3E%3Cpath d='M300 170l1.2 3.6 3.6 1.2-3.6 1.2-1.2 3.6-1.2-3.6-3.6-1.2 3.6-1.2z'/%3E%3Cpath d='M60 300l1 3 3 1-3 1-1 3-1-3-3-1 3-1z'/%3E%3Cpath d='M210 100l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(1100px 480px at 82% -120px, rgba(212, 180, 131, 0.10), transparent 62%),
+    linear-gradient(180deg, var(--night-700) 0%, var(--night-600) 100%);
+  background-size: 420px 420px, auto, auto;
+  color: var(--moon-200);
+}
+
+/* --- 5. 夜空上的文字 → 月光色（直接落在深底上的部分） --- */
+.miniapp-root .app-content .ant-typography { color: var(--moon-200); }
+.miniapp-root .app-content h1.ant-typography,
+.miniapp-root .app-content h2.ant-typography,
+.miniapp-root .app-content h3.ant-typography,
+.miniapp-root .app-content h4.ant-typography,
+.miniapp-root .app-content h5.ant-typography { color: var(--moon-100); }
+.miniapp-root .app-content .ant-typography-secondary { color: rgba(217, 208, 184, 0.72) !important; }
+.miniapp-root .app-content a { color: var(--moon-gold); }
+.miniapp-root .app-content a:hover { color: #eddcb8; }
+.miniapp-root .app-content .ant-btn-link { color: var(--moon-gold); }
+.miniapp-root .app-content .ant-divider { border-color: rgba(212, 180, 131, 0.32); }
+.miniapp-root .app-content .ant-divider-inner-text { color: var(--moon-100); }
+.miniapp-root .app-content .ant-checkbox-wrapper,
+.miniapp-root .app-content .ant-radio-wrapper { color: var(--moon-200); }
+.miniapp-root .app-content .ant-empty-description { color: var(--moon-300); }
+.miniapp-root .app-content .ant-spin-text { color: var(--moon-gold); }
+.miniapp-root .app-content .ant-tabs-tab { color: var(--moon-300); }
+.miniapp-root .app-content .ant-breadcrumb,
+.miniapp-root .app-content .ant-breadcrumb a { color: var(--moon-300); }
+.miniapp-root .app-content .ant-pagination-item a { color: var(--moon-200); }
+.miniapp-root .app-content .ant-pagination-prev button,
+.miniapp-root .app-content .ant-pagination-next button { color: var(--moon-200); }
+.miniapp-root .app-content .ant-pagination-item-active {
+  background: rgba(212, 180, 131, 0.16);
+  border-color: var(--moon-gold-dim);
+}
+.miniapp-root .app-content .ant-pagination-item-active a { color: var(--moon-gold); }
+.miniapp-root .app-content .ant-pagination-item-ellipsis { color: var(--moon-300) !important; }
+.miniapp-root .app-content .ant-segmented {
+  background: rgba(255, 255, 255, 0.09);
+}
+.miniapp-root .app-content .ant-segmented .ant-segmented-item { color: var(--moon-300); }
+.miniapp-root .app-content .ant-segmented .ant-segmented-item-selected { color: var(--ink-800); }
+.miniapp-root .app-content .ant-statistic-title { color: var(--moon-300); }
+
+/* --- 6. 卡片 = 月下纸页（浅暖纸色，保证长文可读） --- */
+.miniapp-root .ant-card {
+  background: #fbf8f1;
+  border-color: rgba(212, 180, 131, 0.38);
+  color: var(--ink-700);
+  box-shadow: 0 2px 14px rgba(8, 14, 22, 0.38);
+}
+.miniapp-root .ant-card-head {
+  background: rgba(212, 180, 131, 0.10);
+  border-bottom-color: rgba(176, 141, 87, 0.32);
+  color: var(--ink-800);
+}
+.miniapp-root .ant-card .ant-typography { color: var(--ink-900); }
+.miniapp-root .ant-card h1.ant-typography,
+.miniapp-root .ant-card h2.ant-typography,
+.miniapp-root .ant-card h3.ant-typography,
+.miniapp-root .ant-card h4.ant-typography,
+.miniapp-root .ant-card h5.ant-typography { color: var(--ink-900); }
+.miniapp-root .ant-card .ant-typography-secondary { color: var(--ink-600) !important; }
+.miniapp-root .ant-card a { color: var(--ink-800); }
+.miniapp-root .ant-card a:hover { color: var(--bronze-500); }
+.miniapp-root .ant-card .ant-btn-link { color: var(--ink-800); }
+.miniapp-root .ant-card .ant-btn-link:hover { color: var(--bronze-500); }
+.miniapp-root .ant-card .ant-divider { border-color: var(--border-light); }
+.miniapp-root .ant-card .ant-divider-inner-text { color: var(--ink-800); }
+.miniapp-root .ant-card .ant-checkbox-wrapper,
+.miniapp-root .ant-card .ant-radio-wrapper { color: var(--ink-700); }
+.miniapp-root .ant-card .ant-statistic-title { color: var(--ink-600); }
+.miniapp-root .ant-card .ant-empty-description { color: var(--ink-500); }
+
+/* 卡片 hover：夜空里的星光更亮一点 */
+.miniapp-root .ant-card:hover {
+  border-color: rgba(212, 180, 131, 0.85);
+  box-shadow: 0 10px 32px rgba(212, 180, 131, 0.28), 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* --- 7. 按钮在夜空上的适配 --- */
+.miniapp-root .ant-btn-primary {
+  background: linear-gradient(135deg, #8b6f3f, #b08d57);
+  border-color: #8b6f3f;
+}
+.miniapp-root .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #a3814e, #d4b483) !important;
+  border-color: #b08d57 !important;
+}
+
+/* --- 8. 纸页岛屿：页面里非 ant-card 的浅底容器，统一换成月下纸色 + 墨字 --- */
+.miniapp-root .theme-content,
+.miniapp-root .theme-header,
+.miniapp-root .paper-hero,
+.miniapp-root .comment-list,
+.miniapp-root .notes-header,
+.miniapp-root .comment-editor,
+.miniapp-root .papers-filter,
+.miniapp-root .cat-toolbar,
+.miniapp-root .cat-content {
+  background: #fbf8f1 !important;
+  border-color: rgba(176, 141, 87, 0.35) !important;
+}
+.miniapp-root .cat-sider {
+  background: #f4efe4 !important;
+  border-color: rgba(176, 141, 87, 0.35) !important;
+}
+.miniapp-root .note-card { background: #f6f1e4; }
+.miniapp-root .zh-summary { border-color: rgba(176, 141, 87, 0.4); }
+
+/* 纸页岛屿内的文字一律回到墨色（抵消 5 节的月光色继承） */
+.miniapp-root .app-content .theme-content .ant-typography,
+.miniapp-root .app-content .theme-header .ant-typography,
+.miniapp-root .app-content .paper-hero .ant-typography,
+.miniapp-root .app-content .comment-list .ant-typography,
+.miniapp-root .app-content .notes-header .ant-typography,
+.miniapp-root .app-content .papers-filter .ant-typography,
+.miniapp-root .app-content .cat-toolbar .ant-typography,
+.miniapp-root .app-content .cat-sider .ant-typography,
+.miniapp-root .app-content .cat-content .ant-typography {
+  color: var(--ink-900);
+}
+.miniapp-root .app-content .theme-content h1.ant-typography,
+.miniapp-root .app-content .theme-content h2.ant-typography,
+.miniapp-root .app-content .theme-content h3.ant-typography,
+.miniapp-root .app-content .theme-content h4.ant-typography,
+.miniapp-root .app-content .theme-content h5.ant-typography,
+.miniapp-root .app-content .theme-header h2.ant-typography,
+.miniapp-root .app-content .theme-header h3.ant-typography,
+.miniapp-root .app-content .paper-hero h2.ant-typography,
+.miniapp-root .app-content .paper-hero h3.ant-typography {
+  color: var(--ink-900);
+}
+.miniapp-root .app-content .theme-content .ant-typography-secondary,
+.miniapp-root .app-content .theme-header .ant-typography-secondary,
+.miniapp-root .app-content .paper-hero .ant-typography-secondary,
+.miniapp-root .app-content .comment-list .ant-typography-secondary,
+.miniapp-root .app-content .notes-header .ant-typography-secondary,
+.miniapp-root .app-content .papers-filter .ant-typography-secondary,
+.miniapp-root .app-content .cat-content .ant-typography-secondary,
+.miniapp-root .app-content .cat-sider .ant-typography-secondary {
+  color: var(--ink-600) !important;
+}
+.miniapp-root .app-content .theme-content a,
+.miniapp-root .app-content .paper-hero a,
+.miniapp-root .app-content .comment-list a,
+.miniapp-root .app-content .cat-content a {
+  color: var(--ink-800);
+}
+.miniapp-root .app-content .theme-content a:hover,
+.miniapp-root .app-content .paper-hero a:hover,
+.miniapp-root .app-content .cat-content a:hover {
+  color: var(--bronze-500);
+}
+.miniapp-root .app-content .theme-content .ant-divider,
+.miniapp-root .app-content .paper-hero .ant-divider {
+  border-color: var(--border-light);
+}
+.miniapp-root .app-content .theme-content .ant-divider-inner-text {
+  color: var(--ink-800);
+}
+.miniapp-root .theme-review-body { color: var(--ink-800); }
+
+/* Forum 帖子卡内底色微调 */
+.miniapp-root .forum-post-card { background: #fbf8f1; }
+
+/* cat-sider 里的 antd Menu 保持浅色可读 */
+.miniapp-root .cat-sider .ant-menu {
+  background: transparent;
+  color: var(--ink-700);
+}
+.miniapp-root .cat-sider .ant-menu-light .ant-menu-item { color: var(--ink-700); }
+
+/* --- 9. 夜空上的 Segmented / Input 适配 --- */
+.miniapp-root .app-content .ant-input-affix-wrapper,
+.miniapp-root .app-content .ant-input,
+.miniapp-root .app-content .ant-select-selector {
+  border-color: rgba(176, 141, 87, 0.4);
+}
+/* 直接落在夜空上的输入框（非卡片内），保持白底即可读 */
+
+/* --- 10. Modal / Drawer / Dropdown 弹层保持纸色 --- */
+.miniapp-root .ant-modal-content,
+.miniapp-root .ant-drawer-content {
+  background: #fbf8f1;
+}
+.miniapp-root .ant-modal-header { background: transparent; }
