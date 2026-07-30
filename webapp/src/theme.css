@@ -134,24 +134,24 @@
 .miniapp-root .app-logo .folk-logo-underline::after {
   content: '☾';
   position: absolute;
-  right: -16px;
-  top: -10px;
-  font-size: 11px;
+  right: -18px;
+  top: -13px;
+  font-size: 15px;
   line-height: 1;
-  color: var(--bronze-500, #b08d57);
-  opacity: 0.55;
+  color: var(--bronze-500, #a3814e);
+  opacity: 0.9;
 }
 
 /* 月相序列小条：新月→满月→残月，用于 Divider / 卡片脚注 */
 .witch-moonphase {
   display: inline-block;
-  width: 86px;
-  height: 12px;
+  width: 110px;
+  height: 15px;
   vertical-align: middle;
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 0.65;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 172 24'%3E%3Cg stroke='%23b08d57' stroke-width='1.2' fill='none'%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3Cpath d='M49 6a6 6 0 100 12 4.6 6 0 110-12z' fill='%23b08d57' fill-opacity='.55' stroke='none'/%3E%3Ccircle cx='86' cy='12' r='6' fill='%23b08d57' fill-opacity='.55'/%3E%3Cpath d='M123 6a6 6 0 110 12 4.6 6 0 100-12z' fill='%23b08d57' fill-opacity='.55' stroke='none'/%3E%3Ccircle cx='160' cy='12' r='6'/%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.95;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 172 24'%3E%3Cg stroke='%23a3814e' stroke-width='1.8' fill='none'%3E%3Ccircle cx='12' cy='12' r='6'/%3E%3Cpath d='M49 6a6 6 0 100 12 4.6 6 0 110-12z' fill='%23a3814e' fill-opacity='.85' stroke='none'/%3E%3Ccircle cx='86' cy='12' r='6' fill='%23a3814e' fill-opacity='.85'/%3E%3Cpath d='M123 6a6 6 0 110 12 4.6 6 0 100-12z' fill='%23a3814e' fill-opacity='.85' stroke='none'/%3E%3Ccircle cx='160' cy='12' r='6'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* 写意星子：随机散布的四角星，用作卡片角落点缀 */
@@ -163,10 +163,10 @@
   position: absolute;
   top: 8px;
   right: 10px;
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.9;
   background-repeat: no-repeat;
   background-size: contain;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg fill='%23b08d57'%3E%3Cpath d='M30 4l1.2 3.8L35 9l-3.8 1.2L30 14l-1.2-3.8L25 9l3.8-1.2z'/%3E%3Cpath d='M12 20l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z' fill-opacity='.7'/%3E%3Ccircle cx='34' cy='24' r='1' fill-opacity='.6'/%3E%3Ccircle cx='20' cy='8' r='.8' fill-opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
@@ -175,7 +175,7 @@
 /* hero 右上：写意星座连线 + 悬月（叠在原渐变底上） */
 .miniapp-root .home-hero.witch-constellation {
   background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 120'%3E%3Cg stroke='%23b08d57' stroke-opacity='.4' stroke-width='.8' fill='none'%3E%3Cpath d='M30 78L74 52L120 66L158 30L196 44'/%3E%3C/g%3E%3Cg fill='%23b08d57'%3E%3Ccircle cx='30' cy='78' r='2' fill-opacity='.6'/%3E%3Ccircle cx='74' cy='52' r='1.6' fill-opacity='.55'/%3E%3Ccircle cx='120' cy='66' r='2.2' fill-opacity='.6'/%3E%3Ccircle cx='158' cy='30' r='1.5' fill-opacity='.5'/%3E%3Ccircle cx='196' cy='44' r='2' fill-opacity='.6'/%3E%3Cpath d='M52 20a11 11 0 100 22 8.6 11 0 110-22z' fill-opacity='.4'/%3E%3Cpath d='M104 24l1 3.2 3.2 1-3.2 1-1 3.2-1-3.2-3.2-1 3.2-1z' fill-opacity='.5'/%3E%3Ccircle cx='140' cy='90' r='1' fill-opacity='.45'/%3E%3Ccircle cx='180' cy='72' r='.9' fill-opacity='.4'/%3E%3C/g%3E%3C/svg%3E") no-repeat right 24px top 14px / 210px auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 130'%3E%3Cg stroke='%23a3814e' stroke-opacity='.85' stroke-width='1.3' fill='none'%3E%3Cpath d='M34 92L86 60L140 78L186 34L232 52'/%3E%3C/g%3E%3Cg fill='%23a3814e'%3E%3Ccircle cx='34' cy='92' r='3.4' fill-opacity='.95'/%3E%3Ccircle cx='86' cy='60' r='2.8' fill-opacity='.9'/%3E%3Ccircle cx='140' cy='78' r='3.8' fill-opacity='.95'/%3E%3Ccircle cx='186' cy='34' r='2.6' fill-opacity='.85'/%3E%3Ccircle cx='232' cy='52' r='3.4' fill-opacity='.95'/%3E%3Cpath d='M58 14a15 15 0 100 30 11.4 15 0 110-30z' fill-opacity='.8'/%3E%3Cpath d='M122 20l1.6 5 5 1.6-5 1.6-1.6 5-1.6-5-5-1.6 5-1.6z' fill-opacity='.9'/%3E%3Cpath d='M208 88l1.2 3.6 3.6 1.2-3.6 1.2-1.2 3.6-1.2-3.6-3.6-1.2 3.6-1.2z' fill-opacity='.75'/%3E%3Ccircle cx='166' cy='102' r='1.6' fill-opacity='.7'/%3E%3Ccircle cx='104' cy='98' r='1.4' fill-opacity='.65'/%3E%3Ccircle cx='246' cy='20' r='1.5' fill-opacity='.7'/%3E%3C/g%3E%3C/svg%3E") no-repeat right 20px top 10px / 280px auto,
     linear-gradient(135deg, #ffffff 0%, #f7f8fa 60%, #eef1f5 100%);
 }
 @media (max-width: 768px) {
