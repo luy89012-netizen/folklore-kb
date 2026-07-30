@@ -30,6 +30,21 @@
   pointer-events: none;
 }
 
+/* Hero 底部回纹装饰条（民俗元素点缀） */
+.miniapp-root .home-hero::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background-image: var(--meander-strip);
+  background-repeat: repeat-x;
+  background-position: center bottom 2px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 .miniapp-root .home-hero h1,
 .miniapp-root .home-hero .ant-typography h1 {
   color: var(--ink-900);
