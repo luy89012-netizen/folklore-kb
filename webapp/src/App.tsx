@@ -11,6 +11,7 @@ import {
   AppstoreOutlined,
   SearchOutlined,
   ExperimentOutlined,
+  CommentOutlined,
 } from '@ant-design/icons'
 import HomePage from './pages/Home'
 // 首屏之外的页面走懒加载，减少首次加载体积
@@ -21,6 +22,7 @@ const WeeklyPage = lazy(() => import('./pages/Weekly'))
 const CategoriesPage = lazy(() => import('./pages/Categories'))
 const SearchPage = lazy(() => import('./pages/Search'))
 const CasesPage = lazy(() => import('./pages/Cases'))
+const ForumPage = lazy(() => import('./pages/Forum'))
 import './App.css'
 
 const PageLoading = () => (
@@ -44,6 +46,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     { key: 'themes', icon: <ClusterOutlined />, label: <Link to="/themes">主题综述</Link> },
     { key: 'cases', icon: <ExperimentOutlined />, label: <Link to="/cases">案例库</Link> },
     { key: 'weekly', icon: <RiseOutlined />, label: <Link to="/weekly">新作速览</Link> },
+    { key: 'forum', icon: <CommentOutlined />, label: <Link to="/forum">阅读讨论区</Link> },
   ]
 
   return (
@@ -52,6 +55,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="app-logo">
           <ReadOutlined />
           {!collapsed && <span className="app-logo-title">民俗学知识库</span>}
+          {!collapsed && <span className="folk-logo-underline" />}
         </div>
         <Menu
           mode="inline"
@@ -82,6 +86,7 @@ function getHeaderTitle(pathKey: string): string {
     cases: '🔬 案例库',
     paper: '📄 文献详情',
     weekly: '⚡ 新作速览',
+    forum: '🗣️ 阅读讨论区',
   }
   return titles[pathKey] || '民俗学知识库'
 }
@@ -111,6 +116,7 @@ export default function App() {
               <Route path="/weekly" element={<Suspense fallback={<PageLoading />}><WeeklyPage /></Suspense>} />
               <Route path="/search" element={<Suspense fallback={<PageLoading />}><SearchPage /></Suspense>} />
               <Route path="/cases" element={<Suspense fallback={<PageLoading />}><CasesPage /></Suspense>} />
+              <Route path="/forum" element={<Suspense fallback={<PageLoading />}><ForumPage /></Suspense>} />
             </Routes>
           </AppLayout>
         </HashRouter>
