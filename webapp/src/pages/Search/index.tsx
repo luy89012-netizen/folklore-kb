@@ -15,7 +15,7 @@ function Hl({ text, kw }: { text: string; kw: string }) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark style={{ background: '#ffe58f', padding: 0 }}>{text.slice(idx, idx + kw.length)}</mark>
+      <mark style={{ background: 'rgba(212,180,131,0.45)', color: 'inherit', padding: 0 }}>{text.slice(idx, idx + kw.length)}</mark>
       {text.slice(idx + kw.length)}
     </>
   )
