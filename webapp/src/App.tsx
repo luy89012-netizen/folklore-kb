@@ -8,8 +8,6 @@ import {
   ClusterOutlined,
   RiseOutlined,
   ReadOutlined,
-  AppstoreOutlined,
-  SearchOutlined,
   ExperimentOutlined,
   CommentOutlined,
 } from '@ant-design/icons'
@@ -40,9 +38,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
   const menuItems = [
     { key: 'home', icon: <HomeOutlined />, label: <Link to="/home">首页</Link> },
-    { key: 'search', icon: <SearchOutlined />, label: <Link to="/search">搜索</Link> },
     { key: 'papers', icon: <BookOutlined />, label: <Link to="/papers">文献库</Link> },
-    { key: 'categories', icon: <AppstoreOutlined />, label: <Link to="/categories">分类目录</Link> },
     { key: 'themes', icon: <ClusterOutlined />, label: <Link to="/themes">主题综述</Link> },
     { key: 'cases', icon: <ExperimentOutlined />, label: <Link to="/cases">案例库</Link> },
     { key: 'weekly', icon: <RiseOutlined />, label: <Link to="/weekly">新作速览</Link> },
@@ -59,7 +55,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
         <Menu
           mode="inline"
-          selectedKeys={[pathKey === 'paper' ? 'papers' : pathKey]}
+          selectedKeys={[['paper', 'categories', 'search'].includes(pathKey) ? 'papers' : pathKey]}
           items={menuItems}
         />
       </Sider>
