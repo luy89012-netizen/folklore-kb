@@ -10,6 +10,7 @@ import './main.css'
 
 const container = document.getElementById('miniapp-root')
 if (!container) throw new Error('找不到 #miniapp-root 挂载点')
+container.classList.add('miniapp-root') // theme.css 全部规则挂在 .miniapp-root class 下
 const root = createRoot(container)
 root.render(
   <React.StrictMode>
