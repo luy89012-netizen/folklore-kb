@@ -499,7 +499,7 @@ export default function PaperDetailPage() {
                 </Space>
                 <pre
                   style={{
-                    background: '#f7f8fa', padding: 12, borderRadius: 4, fontSize: 12.5,
+                    background: 'rgba(0,0,0,0.28)', padding: 12, borderRadius: 4, fontSize: 12.5,
                     whiteSpace: 'pre-wrap', wordBreak: 'break-all', margin: 0, lineHeight: 1.7,
                   }}
                 >
