@@ -53,6 +53,70 @@
     linear-gradient(rgba(44, 62, 80, 0.012) 1px, transparent 1px),
     linear-gradient(90deg, rgba(44, 62, 80, 0.012) 1px, transparent 1px);
   --paper-texture-size: 32px 32px;
+
+  /* === 民俗纹样点缀（回纹 · meander，古铜金极淡） === */
+  /* 回纹横条：用于 hero 顶部、页脚等水平装饰 */
+  --meander-strip: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M2 10 V2 H10 V6 H6 V10 H14 V2 H22 V10' fill='none' stroke='%23b08d57' stroke-opacity='0.35' stroke-width='1.2'/%3E%3C/svg%3E");
+}
+
+/* ============ 民俗元素装饰类 ============ */
+
+/* 回纹装饰条：细横带，用在 hero 卡片顶部 */
+.folk-meander-top {
+  position: relative;
+}
+.folk-meander-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background-image: var(--meander-strip);
+  background-repeat: repeat-x;
+  background-position: center;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* 菱形纹样分隔（用于 Divider 内文字前后） */
+.folk-divider-mark::before {
+  content: '❖';
+  color: var(--bronze-500);
+  opacity: 0.55;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+/* 剪纸风格角饰：卡片右上角一枚极淡的对称纹样 */
+.folk-corner {
+  position: relative;
+  overflow: hidden;
+}
+.folk-corner::after {
+  content: '';
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 72px;
+  height: 72px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23b08d57' stroke-opacity='0.18' stroke-width='1'%3E%3Ccircle cx='36' cy='36' r='30'/%3E%3Ccircle cx='36' cy='36' r='22'/%3E%3Cpath d='M36 6 L40 18 L36 30 L32 18 Z'/%3E%3Cpath d='M66 36 L54 40 L42 36 L54 32 Z'/%3E%3Cpath d='M36 66 L32 54 L36 42 L40 54 Z'/%3E%3Cpath d='M6 36 L18 32 L30 36 L18 40 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: contain;
+  pointer-events: none;
+}
+
+/* 侧栏 logo 下的小纹样横线（绝对定位贴在 logo 区底部） */
+.folk-logo-underline {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 6px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='6' viewBox='0 0 56 6'%3E%3Cpath d='M0 3 H20 M36 3 H56' stroke='%23b08d57' stroke-opacity='0.5' stroke-width='1'/%3E%3Cpath d='M28 0 L31 3 L28 6 L25 3 Z' fill='%23b08d57' fill-opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
 }
 
 /* 覆盖 antd 主题色的 fallback（qiankun 沙箱兼容） */
