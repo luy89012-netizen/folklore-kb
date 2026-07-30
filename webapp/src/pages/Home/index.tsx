@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Card, Row, Col, Statistic, Tag, Typography, Spin, Divider, Space, Button } from 'antd'
-import { RightOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Card, Row, Col, Statistic, Tag, Typography, Spin, Divider, Space, Button, Input } from 'antd'
+import { RightOutlined, SearchOutlined } from '@ant-design/icons'
+import { Link, useNavigate } from 'react-router-dom'
 import { fetchAllPapers, CATEGORY_META, THEME_META, Paper } from '../../api'
 import { THEME_REVIEWS } from '../../data/themes'
 import { DAILY_TOPICS } from '../../data/dailyTopics'
@@ -20,6 +20,8 @@ export default function HomePage() {
   const [papers, setPapers] = useState<Paper[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchKw, setSearchKw] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchAllPapers()
@@ -74,7 +76,71 @@ export default function HomePage() {
           <b> {THEME_REVIEWS.length}</b> 大理论主题，
           覆盖 <b>{countries.size}</b> 个国别民俗学传统，时间跨度 <b>{yearMax - yearMin}</b> 年（{yearMin}—{yearMax}）。
         </Paragraph>
+        <Input
+          size="large"
+          prefix={<SearchOutlined style={{ color: '#7a8a99' }} />}
+          placeholder="搜索全库：标题 / 作者 / 摘要 / 关键概念…（回车搜索）"
+          value={searchKw}
+          onChange={(e) => setSearchKw(e.target.value)}
+          onPressEnter={() => navigate(`/search${searchKw.trim() ? `?q=${encodeURIComponent(searchKw.trim())}` : ''}`)}
+          style={{ marginTop: 20, maxWidth: 560 }}
+          allowClear
+        />
       </div>
+
+      <Divider titlePlacement="left">🧭 怎么用这个库</Divider>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12} lg={6}>
+          <Link to="/papers">
+            <Card hoverable size="small" style={{ height: '100%' }}>
+              <Space direction="vertical" size={6}>
+                <Text style={{ fontSize: 22 }}>📖</Text>
+                <Text strong>1 · 读文献</Text>
+                <Text type="secondary" style={{ fontSize: 12.5, lineHeight: 1.7 }}>
+                  进「文献库」挑一篇：经典库有 2000 字精读（背景/论点/方法/概念/写作切口），JAF 前沿有中文摘要 + 核心案例详解。
+                </Text>
+              </Space>
+            </Card>
+          </Link>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card hoverable size="small" style={{ height: '100%' }}>
+            <Space direction="vertical" size={6}>
+              <Text style={{ fontSize: 22 }}>✍️</Text>
+              <Text strong>2 · 边读边记</Text>
+              <Text type="secondary" style={{ fontSize: 12.5, lineHeight: 1.7 }}>
+                文献详情页点「记一笔」随手写想法（自动追加带日期），标记「★感兴趣 / ✓已读」，写论文时点「引用」直接复制 GB/T 或 BibTeX。
+              </Text>
+            </Space>
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Link to="/themes">
+            <Card hoverable size="small" style={{ height: '100%' }}>
+              <Space direction="vertical" size={6}>
+                <Text style={{ fontSize: 22 }}>🧭</Text>
+                <Text strong>3 · 按主题串联</Text>
+                <Text type="secondary" style={{ fontSize: 12.5, lineHeight: 1.7 }}>
+                  「主题综述」把全库按 6 大理论脉络串讲；「案例库」聚合 JAF 案例可按研究对象筛；首页每天轮换专题 insight。
+                </Text>
+              </Space>
+            </Card>
+          </Link>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Link to="/weekly">
+            <Card hoverable size="small" style={{ height: '100%' }}>
+              <Space direction="vertical" size={6}>
+                <Text style={{ fontSize: 22 }}>⚡</Text>
+                <Text strong>4 · 每周追新</Text>
+                <Text type="secondary" style={{ fontSize: 12.5, lineHeight: 1.7 }}>
+                  「新作速览」每周一自动抓 10 本期刊的新论文（中文速读 + 三维分类），看完标已读；有想法就去「讨论区」发帖。
+                </Text>
+              </Space>
+            </Card>
+          </Link>
+        </Col>
+      </Row>
 
       <Divider titlePlacement="left">☀️ 今日</Divider>
       <Row gutter={[16, 16]}>
