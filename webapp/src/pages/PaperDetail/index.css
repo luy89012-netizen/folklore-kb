@@ -64,3 +64,27 @@
   border: 1px solid var(--border-light);
   color: var(--ink-700);
 }
+
+/* ===== 理论对话·可跳转文献 ===== */
+.dialogue-links {
+  margin-top: 4px;
+}
+.dialogue-link-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--sf-3, #2f4159);
+  border: 1px solid var(--line-soft, rgba(212,180,131,0.16));
+  transition: border-color 0.18s, background 0.18s, transform 0.12s;
+}
+.dialogue-link-item:hover {
+  border-color: var(--moon-gold, #d4b483);
+  background: var(--sf-4, #35485f);
+  transform: translateX(2px);
+}
+.dialogue-link-title {
+  color: var(--text-mid, #d5dce3);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
