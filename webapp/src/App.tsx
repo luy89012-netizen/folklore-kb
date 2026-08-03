@@ -21,6 +21,7 @@ const CategoriesPage = lazy(() => import('./pages/Categories'))
 const SearchPage = lazy(() => import('./pages/Search'))
 const CasesPage = lazy(() => import('./pages/Cases'))
 const ForumPage = lazy(() => import('./pages/Forum'))
+const RelationsPage = lazy(() => import('./pages/Relations'))
 import './App.css'
 
 const PageLoading = () => (
@@ -55,7 +56,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
         <Menu
           mode="inline"
-          selectedKeys={[['paper', 'categories', 'search'].includes(pathKey) ? 'papers' : pathKey]}
+          selectedKeys={[['paper', 'categories', 'search', 'relations'].includes(pathKey) ? 'papers' : pathKey]}
           items={menuItems}
         />
       </Sider>
@@ -113,6 +114,7 @@ export default function App() {
               <Route path="/search" element={<Suspense fallback={<PageLoading />}><SearchPage /></Suspense>} />
               <Route path="/cases" element={<Suspense fallback={<PageLoading />}><CasesPage /></Suspense>} />
               <Route path="/forum" element={<Suspense fallback={<PageLoading />}><ForumPage /></Suspense>} />
+              <Route path="/relations" element={<Suspense fallback={<PageLoading />}><RelationsPage /></Suspense>} />
             </Routes>
           </AppLayout>
         </HashRouter>
