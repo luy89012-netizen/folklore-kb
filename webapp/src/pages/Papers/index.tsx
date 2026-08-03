@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Card, Row, Col, Tag, Input, Select, Space, Typography, Spin, Empty, Segmented, Button } from 'antd'
-import { SearchOutlined, AppstoreOutlined } from '@ant-design/icons'
+import { SearchOutlined, AppstoreOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { Link, useSearchParams } from 'react-router-dom'
 import { fetchAllPapers, CATEGORY_META, THEME_META, Paper } from '../../api'
 import './index.css'
@@ -82,6 +82,9 @@ export default function PapersPage() {
         />
         <Link to="/categories">
           <Button icon={<AppstoreOutlined />}>分类目录视图</Button>
+        </Link>
+        <Link to="/relations">
+          <Button icon={<ShareAltOutlined />}>文献对话网</Button>
         </Link>
       </div>
       <div className="papers-filter">
