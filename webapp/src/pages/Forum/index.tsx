@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
-  Card, Typography, Spin, Empty, Space, Button, Input, Modal, Select, Tag,
+  Card, Typography, Spin, Space, Button, Input, Modal, Select, Tag,
   App as AntApp, Popconfirm, Divider, Alert,
 } from 'antd'
 import { PlusOutlined, DeleteOutlined, CommentOutlined, UserOutlined } from '@ant-design/icons'
@@ -12,6 +12,7 @@ import {
 import { fetchAllPapers, Paper } from '../../api'
 import { getAnonUserId, getAnonUserName, setAnonUserName } from '../../api/client'
 import { DAILY_TOPICS } from '../../data/dailyTopics'
+import { FORUM_STARTERS, ForumStarter } from '../../data/forumStarters'
 import './index.css'
 
 const { Text, Paragraph, Title } = Typography
@@ -168,6 +169,15 @@ export default function ForumPage() {
     message.success('昵称已更新')
   }
 
+  /** 点话题引导卡：预填标题+脚手架正文，打开发帖 Modal */
+  const openStarter = (s: ForumStarter) => {
+    setTitleDraft(s.prefillTitle)
+    setContentDraft(s.prefillContent)
+    setTopicDraft(s.topicTag)
+    setPaperDraft(s.paperId)
+    setPostModalOpen(true)
+  }
+
   const paperById = (id?: string | null) => papers.find((p) => p.paper_id === id)
 
   if (loading) return <Spin size="large" style={{ display: 'block', margin: '80px auto' }} />
@@ -203,9 +213,26 @@ export default function ForumPage() {
         </Space>
       </div>
 
-      {posts.length === 0 ? (
-        <Empty description="还没有帖子，做第一个发言的人吧" style={{ marginTop: 60 }} />
-      ) : (
+      {posts.length < 5 && (
+        <div className="forum-starters">
+          <Text type="secondary" style={{ fontSize: 13, display: 'block', marginBottom: 10 }}>
+            {posts.length === 0 ? '🌱 还没有帖子——不知道从哪开口？点一个话题，我们已经帮你起好头了：' : '🌱 不知道发什么？从这些话题开始：'}
+          </Text>
+          <div className="forum-starter-grid">
+            {FORUM_STARTERS.map((s) => (
+              <div key={s.id} className="forum-starter-card" onClick={() => openStarter(s)}>
+                <div className="forum-starter-title">
+                  <span style={{ marginRight: 6 }}>{s.emoji}</span>
+                  <Text strong style={{ fontSize: 13.5 }}>{s.title}</Text>
+                </div>
+                <Text type="secondary" style={{ fontSize: 12 }}>{s.hint}</Text>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {posts.length === 0 ? null : (
         posts.map((post) => {
           const stats = voteStats[post.post_id] || { agree: 0, useful: 0, disagree: 0, mine: null }
           const postReplies = repliesByPost[post.post_id] || []
