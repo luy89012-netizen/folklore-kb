@@ -10,8 +10,10 @@ import {
   fetchNotesByPaperId, upsertNote, deleteMyNote, PaperNote,
   fetchCommentsByPaperId, addComment, deleteComment, PaperComment,
   fetchMyNote, getAnonUserId, getAnonUserName, setAnonUserName,
+  fetchPaperBriefs, PaperBrief,
 } from '../../api'
 import { findThemesForPaper } from '../../data/themes'
+import { findRelated, RELATION_TYPE_META, RelationType } from '../../data/relations'
 import { CITE_FORMATS } from '../../utils/cite'
 import { getReadState, cycleReadState, READ_STATE_META, ReadState } from '../../utils/readState'
 import './index.css'
@@ -45,9 +47,25 @@ export default function PaperDetailPage() {
   const [citeModalOpen, setCiteModalOpen] = useState(false)
   // 阅读状态
   const [readState, setReadStateUI] = useState<ReadState>('unread')
+  // 关联文献（对话关系）
+  const [relatedBriefs, setRelatedBriefs] = useState<Record<string, PaperBrief>>({})
 
   useEffect(() => {
     if (paperId) setReadStateUI(getReadState(paperId))
+  }, [paperId])
+
+  // 加载对话关系文献的简要信息
+  useEffect(() => {
+    if (!paperId) return
+    const related = findRelated(paperId)
+    if (!related.length) { setRelatedBriefs({}); return }
+    fetchPaperBriefs(related.map((r) => r.paperId))
+      .then((briefs) => {
+        const map: Record<string, PaperBrief> = {}
+        briefs.forEach((b) => { map[b.paper_id] = b })
+        setRelatedBriefs(map)
+      })
+      .catch(() => {})
   }, [paperId])
 
   const reload = useCallback(async () => {
@@ -301,6 +319,37 @@ export default function PaperDetailPage() {
       {paper.dialogues && (
         <Card title="理论对话" size="small" className="section-card">
           <Paragraph style={{ lineHeight: 1.9, marginBottom: 12 }}>{paper.dialogues}</Paragraph>
+          {(() => {
+            const related = findRelated(paper.paper_id).filter((r) => relatedBriefs[r.paperId])
+            if (!related.length) return null
+            return (
+              <div className="dialogue-links">
+                <Divider style={{ margin: '4px 0 12px' }} />
+                <Text type="secondary" style={{ fontSize: 12.5, display: 'block', marginBottom: 8 }}>
+                  🕸️ 库内可跳转的对话文献（{related.length}）
+                </Text>
+                <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                  {related.map((r) => {
+                    const b = relatedBriefs[r.paperId]
+                    const meta = RELATION_TYPE_META[r.type as RelationType]
+                    return (
+                      <Link key={r.paperId} to={`/paper/${r.paperId}`} className="dialogue-link-item">
+                        <Tag color={meta.color} style={{ fontSize: 11, marginRight: 8, flexShrink: 0 }}>
+                          {r.direction === 'out' ? '引→' : '←被引'} {meta.label}
+                        </Tag>
+                        <span className="dialogue-link-title">
+                          {b.title}
+                          <Text type="secondary" style={{ fontSize: 12, marginLeft: 6 }}>
+                            {b.author}{b.year ? ` · ${b.year}` : ''}
+                          </Text>
+                        </span>
+                      </Link>
+                    )
+                  })}
+                </Space>
+              </div>
+            )
+          })()}
         </Card>
       )}
 
