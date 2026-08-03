@@ -25,6 +25,7 @@ export interface Paper {
 export const CATEGORY_META: Record<string, { label: string; color: string; desc: string }> = {
   classic: { label: '经典', color: '#F6BD16', desc: '被反复引用、构成学科基础的作品' },
   frontier: { label: '前沿', color: '#5B8FF9', desc: '2020 年后的新论文，回应当代议题' },
+  frontier_journal: { label: 'JAF 前沿', color: '#e74c3c', desc: 'Journal of American Folklore 2025-2026 全刊追踪' },
   textbook: { label: '教材', color: '#5AD8A6', desc: '导论/概论/手册，覆盖学科基本框架' },
   related: { label: '相关学科经典', color: '#945FB9', desc: '来自人类学/宗教社会学等相邻学科的经典' },
   reference: { label: '工具书', color: '#8c8c8c', desc: '合订本/参考文献汇编' },
@@ -49,4 +50,21 @@ export async function fetchAllPapers(): Promise<Paper[]> {
 export async function fetchPaperById(paperId: string): Promise<Paper | null> {
   const rows = await sbSelect<Paper>('papers', { filter: `paper_id=eq.${paperId}`, limit: 1 })
   return rows[0] || null
+}
+
+/** 批量查多篇的简要信息（用于关系列表渲染标题/作者/年份）*/
+export interface PaperBrief {
+  paper_id: string
+  title: string
+  author: string
+  year: number | null
+}
+export async function fetchPaperBriefs(ids: string[]): Promise<PaperBrief[]> {
+  if (!ids.length) return []
+  const list = ids.join(',')
+  return sbSelect<PaperBrief>('papers', {
+    select: 'paper_id,title,author,year',
+    filter: `paper_id=in.(${list})`,
+    limit: 200,
+  })
 }
