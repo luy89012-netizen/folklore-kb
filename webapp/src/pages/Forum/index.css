@@ -37,3 +37,36 @@
 .forum-reply-item:last-of-type {
   border-bottom: none;
 }
+
+/* ===== 话题引导卡 ===== */
+.forum-starters {
+  margin-bottom: 22px;
+}
+
+.forum-starter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.forum-starter-card {
+  background: var(--sf-2, #283850);
+  border: 1px solid rgba(212, 180, 131, 0.22);
+  border-radius: 8px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, background 0.2s;
+}
+
+.forum-starter-card:hover {
+  border-color: var(--moon-gold, #d4b483);
+  background: var(--sf-3, #2f4159);
+  transform: translateY(-1px);
+}
+
+.forum-starter-title {
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
