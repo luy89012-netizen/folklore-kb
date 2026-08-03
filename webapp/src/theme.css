@@ -208,7 +208,7 @@
 }
 .miniapp-root .home-hero.witch-constellation .ant-typography-secondary,
 .miniapp-root .home-hero.witch-constellation .ant-typography [class*='secondary'] {
-  color: rgba(230, 222, 205, 0.75) !important;
+  color: rgba(235, 228, 212, 0.88) !important;
 }
 
 /* 手机端保留夜空（覆盖旧的浅色回退） */
@@ -350,7 +350,7 @@
 .miniapp-root .app-content h3.ant-typography,
 .miniapp-root .app-content h4.ant-typography,
 .miniapp-root .app-content h5.ant-typography { color: var(--moon-100); }
-.miniapp-root .app-content .ant-typography-secondary { color: rgba(217, 208, 184, 0.72) !important; }
+.miniapp-root .app-content .ant-typography-secondary { color: rgba(224, 217, 197, 0.88) !important; }
 .miniapp-root .app-content a { color: var(--moon-gold); }
 .miniapp-root .app-content a:hover { color: #eddcb8; }
 .miniapp-root .app-content .ant-btn-link { color: var(--moon-gold); }
@@ -400,8 +400,8 @@
   --line-mid:  rgba(212, 180, 131, 0.30);
   --line-hard: rgba(212, 180, 131, 0.55);
   --text-hi:   #f3ecdd;
-  --text-mid:  #cfd6dd;
-  --text-low:  #93a1b0;
+  --text-mid:  #d5dce3;
+  --text-low:  #aab8c7;
 }
 
 /* --- 6.1 卡片 = 夜色浮台（比页面底浅半档，同色系） --- */
